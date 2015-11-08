@@ -13,6 +13,10 @@ Eclipse Project for the SMSuperstore CSI4124 Project
 	2. General -> Existing Projects into workspace -> Next
 	3. Select Browse and find the project directory you just downloaded.
 	4. Click Finish.
-4. Now you have the project.
+4. Complete.
 
+### Run ###
+
+1. Open Experiment.java
+2. Right click and select Run As -> Java Application
 
