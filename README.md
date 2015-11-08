@@ -20,3 +20,5 @@ Eclipse Project for the SMSuperstore CSI4124 Project
 1. Open Experiment.java
 2. Right click and select Run As -> Java Application
 
+Talk to me in class if you have any issues setting it up.
+
