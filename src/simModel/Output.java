@@ -2,9 +2,9 @@ package simModel;
 
 class Output 
 {
-	ModelName model;
+	SMSuperstore model;
 	
-	protected Output(ModelName md) { model = md; }
+	protected Output(SMSuperstore md) { model = md; }
     // Use OutputSequence class to define Trajectory and Sample Sequences
     // Trajectory Sequences
 
@@ -15,4 +15,6 @@ class Output
     // Sequences - add them here
 
     // SSOVs
+	int numShopped;
+	int numLongWait;
 }

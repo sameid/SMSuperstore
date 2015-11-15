@@ -1,5 +1,6 @@
 package simModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
@@ -10,7 +11,7 @@ import absmodJ.AOSimulationModel;
 import absmodJ.Behaviour;
 //
 // The Simulation model Class
-public class ModelName extends AOSimulationModel
+public class SMSuperstore extends AOSimulationModel
 {
 	// Constants available from Constants class
 	/* Parameter */
@@ -21,6 +22,8 @@ public class ModelName extends AOSimulationModel
 	// Define the reference variables to the various 
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
+	protected ArrayList<Checkout> rCheckoutQueues = new ArrayList<Checkout>();
+	protected ArrayList<Supervisor> rSupervisorQueue = new ArrayList<Supervisor>();
 
 	/* Input Variables */
 	// Define any Independent Input Varaibles here
@@ -38,7 +41,7 @@ public class ModelName extends AOSimulationModel
 
 
 	// Constructor
-	public ModelName(double t0time, double tftime, /*define other args,*/ Seeds sd)
+	public SMSuperstore(double t0time, double tftime, /*define other args,*/ Seeds sd)
 	{
 		// Initialise parameters here
 		

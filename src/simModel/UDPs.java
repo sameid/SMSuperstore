@@ -2,10 +2,10 @@ package simModel;
 
 class UDPs 
 {
-	ModelName model;  // for accessing the clock
+	SMSuperstore model;  // for accessing the clock
 	
 	// Constructor
-	protected UDPs(ModelName model) { this.model = model; }
+	protected UDPs(SMSuperstore model) { this.model = model; }
 
 	// Translate User Defined Procedures into methods
     /*-------------------------------------------------
