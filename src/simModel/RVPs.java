@@ -17,27 +17,10 @@ class RVPs
 	private Exponential interArrDist;  // Exponential distribution for interarrival times
 	private final double WMEAN1=30.0;// !! Customer Arrival every 30 minutes
 	
-	private Normal numItemDist1;
-	private Normal numItemDist2;
-	private final double ITEMS_PER_CUSTOMER_MEAN_1 = 27.32;
-	private final double ITEMS_PER_CUSTOMER_SD_1 = 8.93;
-	private final double ITEMS_PER_CUSTOMER_MEAN_2 = 106.75;
-	private final double ITEMS_PER_CUSTOMER_SD_2 = 18.95;
-	private final double ALPHA = 0.22;
+
 	
-	private Normal checkoutTimeDist;
-	private final double CASH_MEAN = 0.95;
-	private final double CASH_SD = 0.17;
-	private final double CREDIT_MEAN = 1.24;
-	private final double CREDIT_SD = 0.21;
-	private final double CHECK_MEAN = 1.45;
-	private final double CHECK_SD = 0.35;
-	private final double NO_CHECK_MEAN = 2.40;
-	private final double NO_CHECK_SD = 0.21;
+
 	
-	private Normal validationTimeDist;
-	private final double VALIDATION_MEAN = 1.25;
-	private final double VALIDATION_SD = 0.21;
 			
 	// Constructor
 	protected RVPs(SMSuperstore model, Seeds sd) 
@@ -49,10 +32,17 @@ class RVPs
 		numItemDist1 = new Normal(ITEMS_PER_CUSTOMER_MEAN_1, ITEMS_PER_CUSTOMER_SD_1, null);//need to hook up seeds
 		numItemDist2 = new Normal(ITEMS_PER_CUSTOMER_MEAN_2, ITEMS_PER_CUSTOMER_SD_2, null);
 		
-		checkoutTimeDist = new Normal(0, 0, null);
-		validationTimeDist = new Normal(VALIDATION_MEAN, VALIDATION_SD, null);
+		paymentTimeDist = new Normal(0, 0, null);
+//		validationTimeDist = new Normal(VALIDATION_MEAN, VALIDATION_SD, null);
+		
+		paymentTypeRandGen = new MersenneTwister(sd.seed1);
+		checkoutTimeDist = new Normal(0,0,null);
+		baggingTimeDist = new Normal(0,0,null);
+		pricecheckRandGen = new MersenneTwister(sd.seed1);
+		
 	}
 	
+	/****************************/
 	
 	protected double duC()  // for getting next value of duInput
 	{
@@ -64,26 +54,117 @@ class RVPs
 	    return(nxtInterArr+model.getClock());
 	}
 	
-	protected double uNumItem (){
+	/****************************/
+	
+	private Normal numItemDist1;
+	private Normal numItemDist2;
+	private final double ITEMS_PER_CUSTOMER_MEAN_1 = 27.32;
+	private final double ITEMS_PER_CUSTOMER_SD_1 = 8.93;
+	private final double ITEMS_PER_CUSTOMER_MEAN_2 = 106.75;
+	private final double ITEMS_PER_CUSTOMER_SD_2 = 18.95;
+	private final double ALPHA = 0.22;
+	
+	protected int uNumItem (){
 		double r = (ALPHA*numItemDist1.nextDouble()) +  ((1-ALPHA)*numItemDist2.nextDouble());
-		return r;
+		return (int) r;
 	}
 	
-	protected double uCheckoutTm(PaymentType type){
+	/****************************/
+	
+	private final double PROP_CASH_LESS_20 = 0.45;
+	private final double PROP_CREDIT_LESS_20 = 0.25;
+	private final double PROP_CHECK_LESS_20 = 0.30;
+	
+	private final double PROP_CASH_MORE_20 = 0.20;
+	private final double PROP_CREDIT_MORE_20 = 0.35;
+	private final double PROP_CHECK_MORE_20 = 0.45;
+	
+	MersenneTwister paymentTypeRandGen;
+	
+	protected Customer.PaymentType uPaymentType(int numOfItems){
+		double randNum = paymentTypeRandGen.nextDouble();
+		Customer.PaymentType type = null;
+		if (numOfItems <= 20){
+			if (randNum <= PROP_CASH_LESS_20) type = Customer.PaymentType.CASH;
+			else if (randNum > PROP_CASH_LESS_20 && randNum <= PROP_CASH_LESS_20+PROP_CREDIT_LESS_20) type = Customer.PaymentType.CREDIT;
+			else if (randNum > PROP_CASH_LESS_20+PROP_CREDIT_LESS_20) type = Customer.PaymentType.CHECK_WITH_CHECK_CASHING_CARD;//need to fix
+		}
+		else {
+			if (randNum <= PROP_CASH_MORE_20) type = Customer.PaymentType.CASH;
+			else if (randNum > PROP_CASH_MORE_20 && randNum <= PROP_CASH_MORE_20+PROP_CREDIT_MORE_20) type = Customer.PaymentType.CREDIT;
+			else if (randNum > PROP_CASH_MORE_20+PROP_CREDIT_MORE_20) type = Customer.PaymentType.CHECK_WITH_CHECK_CASHING_CARD;//need to fix
+		}
+		return type;
+		
+	}
+
+	/****************************/
+	
+	
+
+	private Normal checkoutTimeDist;
+	private final double CHECKOUT_MEAN = 0.05;
+	private final double CHECKOUT_STANDARD_DEVIATION = 0.0125;
+	
+	protected double uCheckoutTm(int numOfItems){
+		return numOfItems * (checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION));
+	}
+
+	/****************************/
+	
+	private Normal paymentTimeDist;
+	private final double CASH_MEAN = 0.95;
+	private final double CASH_SD = 0.17;
+	private final double CREDIT_MEAN = 1.24;
+	private final double CREDIT_SD = 0.21;
+	private final double CHECK_MEAN = 1.45;
+	private final double CHECK_SD = 0.35;
+	private final double NO_CHECK_MEAN = 2.40;
+	private final double NO_CHECK_SD = 0.21;
+	
+	protected double uPaymentTm(PaymentType type){
 		double r = 0.0;
-		if (type == PaymentType.CASH)r = checkoutTimeDist.nextDouble(CASH_MEAN, CASH_SD);
-		else if (type == PaymentType.CREDIT)r = checkoutTimeDist.nextDouble(CREDIT_MEAN, CREDIT_SD);
-		else if (type == PaymentType.CHECK_WITH_CHECK_CASHING_CARD) r = checkoutTimeDist.nextDouble(CHECK_MEAN, CHECK_SD);
-		else if(type == PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD)r = checkoutTimeDist.nextDouble(NO_CHECK_MEAN, NO_CHECK_SD);
+		if (type == PaymentType.CASH)r = paymentTimeDist.nextDouble(CASH_MEAN, CASH_SD);
+		else if (type == PaymentType.CREDIT)r = paymentTimeDist.nextDouble(CREDIT_MEAN, CREDIT_SD);
+		else if (type == PaymentType.CHECK_WITH_CHECK_CASHING_CARD) r = paymentTimeDist.nextDouble(CHECK_MEAN, CHECK_SD);
+		else if(type == PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD)r = paymentTimeDist.nextDouble(NO_CHECK_MEAN, NO_CHECK_SD);
 		return r;
 	}
+
+	/****************************/
 	
-	protected double uValidationTM(){
-		return validationTimeDist.nextDouble();
+	private Normal baggingTimeDist;
+	private final double BAGGING_MEAN = 0.021;
+	private final double BAGGING_STANDARD_DEVIATION = 0.20;//need to fix 20%
+	
+	protected double uBaggingTm(int numOfItems){
+		return numOfItems * (checkoutTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION));
 	}
+
+	/****************************/
 	
-	protected double uBaggingTm(){
-		return 0;
+//	private Normal validationTimeDist;
+//	private final double VALIDATION_MEAN = 1.25;
+//	private final double VALIDATION_SD = 0.21;
+//	
+//	protected double uValidationTM(){
+//		return validationTimeDist.nextDouble();
+//	}
+
+	/****************************/
+	
+	MersenneTwister pricecheckRandGen;
+	private final double PROP_PRICE_CHECK = 0.013;
+	private final double PROP_NO_CHECK = 0.987;
+	
+	protected double uPriceCheckTm(int numOfItems){
+		double addedTime = 0.0;
+		for (int i = 0 ; i < numOfItems ; i++){
+			double randNum = pricecheckRandGen.nextDouble();
+			if (randNum <= PROP_PRICE_CHECK) addedTime += 2.2;
+		}
+		return addedTime;
+		
 	}
 	
 }
