@@ -15,6 +15,7 @@ class Output
     // Sequences - add them here
 
     // SSOVs
-	int numShopped;
+	int numServed;
 	int numLongWait;
+	
 }

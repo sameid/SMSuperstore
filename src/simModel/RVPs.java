@@ -17,11 +17,6 @@ class RVPs
 	private Exponential interArrDist;  // Exponential distribution for interarrival times
 	private final double WMEAN1=30.0;// !! Customer Arrival every 30 minutes
 	
-
-	
-
-	
-			
 	// Constructor
 	protected RVPs(SMSuperstore model, Seeds sd) 
 	{ 
@@ -79,6 +74,9 @@ class RVPs
 	private final double PROP_CREDIT_MORE_20 = 0.35;
 	private final double PROP_CHECK_MORE_20 = 0.45;
 	
+	private final double PROP_CASHING_CARD = 0.73;
+	private final double PROP_NO_CASHING = 0.27;
+	
 	MersenneTwister paymentTypeRandGen;
 	
 	protected Customer.PaymentType uPaymentType(int numOfItems){
@@ -94,14 +92,17 @@ class RVPs
 			else if (randNum > PROP_CASH_MORE_20 && randNum <= PROP_CASH_MORE_20+PROP_CREDIT_MORE_20) type = Customer.PaymentType.CREDIT;
 			else if (randNum > PROP_CASH_MORE_20+PROP_CREDIT_MORE_20) type = Customer.PaymentType.CHECK_WITH_CHECK_CASHING_CARD;//need to fix
 		}
+		
+		if (type == Customer.PaymentType.CHECK_WITH_CHECK_CASHING_CARD){
+			randNum = paymentTypeRandGen.nextDouble();
+			if (randNum > PROP_CASHING_CARD ) type = Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD;
+		}
 		return type;
 		
 	}
 
 	/****************************/
 	
-	
-
 	private Normal checkoutTimeDist;
 	private final double CHECKOUT_MEAN = 0.05;
 	private final double CHECKOUT_STANDARD_DEVIATION = 0.0125;
@@ -127,7 +128,7 @@ class RVPs
 		if (type == PaymentType.CASH)r = paymentTimeDist.nextDouble(CASH_MEAN, CASH_SD);
 		else if (type == PaymentType.CREDIT)r = paymentTimeDist.nextDouble(CREDIT_MEAN, CREDIT_SD);
 		else if (type == PaymentType.CHECK_WITH_CHECK_CASHING_CARD) r = paymentTimeDist.nextDouble(CHECK_MEAN, CHECK_SD);
-		else if(type == PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD)r = paymentTimeDist.nextDouble(NO_CHECK_MEAN, NO_CHECK_SD);
+		else if (type == PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD)r = paymentTimeDist.nextDouble(NO_CHECK_MEAN, NO_CHECK_SD);
 		return r;
 	}
 
@@ -160,7 +161,7 @@ class RVPs
 	protected double uPriceCheckTm(int numOfItems){
 		double addedTime = 0.0;
 		for (int i = 0 ; i < numOfItems ; i++){
-			double randNum = pricecheckRandGen.nextDouble();
+			double randNum = pricecheckRandGen.nextDouble(); 
 			if (randNum <= PROP_PRICE_CHECK) addedTime += 2.2;
 		}
 		return addedTime;

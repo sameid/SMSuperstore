@@ -21,14 +21,13 @@ class Initialise extends ScheduledAction
 	{
 		// System Initialisation
         // Add initilisation instructions
-		for (int i = 0 ; i < model.rCheckoutQueues.size() ; i++){
-			model.rCheckoutQueues.get(i).rCheckoutQueue.clear();
-			model.rCheckoutQueues.get(i).baggerPresent = false;
-		}
-		model.rSupervisorQueue.clear();
-		model.rCheckoutQueues.clear(); 
+//		for (int i = 0 ; i < model.rCheckouts.size() ; i++){
+//			model.rCheckouts.get(i).rCheckoutQueue.clear();
+//		}
+//		model.rSupervisorQueue.clear();
+		model.rCheckouts.clear(); 
 		model.output.numLongWait = 0;
-		model.output.numShopped = 0;
+		model.output.numServed = 0;
 	}
 	
 

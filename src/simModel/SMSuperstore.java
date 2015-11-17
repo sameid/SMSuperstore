@@ -2,7 +2,9 @@ package simModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import absmodJ.SBNotice;
 import absmodJ.ScheduledActivity;
@@ -22,8 +24,10 @@ public class SMSuperstore extends AOSimulationModel
 	// Define the reference variables to the various 
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
-	protected ArrayList<Checkout> rCheckoutQueues = new ArrayList<Checkout>();
-	protected ArrayList<Supervisor> rSupervisorQueue = new ArrayList<Supervisor>();
+	protected ArrayList<Checkout> rCheckouts = new ArrayList<Checkout>();
+	protected Supervisor rSupervisor = new Supervisor();
+	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
+	protected Baggers rgBaggers = new Baggers();
 
 	/* Input Variables */
 	// Define any Independent Input Varaibles here
