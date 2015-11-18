@@ -1,5 +1,7 @@
 package simModel;
 
+import java.util.LinkedList;
+
 import absmodJ.ScheduledAction;
 
 
@@ -27,8 +29,8 @@ class Initialise extends ScheduledAction
 //		model.rSupervisorQueue.clear();
 		
 		for (int i = 0 ; i < model.rCheckouts.length ; i++){
-			model.rCheckouts[i] = new Checkout();
-			model.rCheckoutQueues[i] = new CheckoutQueue();
+			model.rCheckouts[i] = new CheckoutCounter();
+			model.rCheckoutQueues[i] = new LinkedList<Customer>();
 		}
 		
 		model.output.numLongWait = 0;

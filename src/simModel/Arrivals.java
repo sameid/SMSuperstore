@@ -25,15 +25,15 @@ public class Arrivals extends ScheduledAction{
 		int min = 0;
 		int minIndex = 0;
 		for (int i = 0; i < model.rCheckouts.length; i++){
-			Checkout c = model.rCheckouts[i]; 
-			if (c != null && c.status == Checkout.Status.BUSY || c.status == Checkout.Status.NOT_BUSY){
-				if (model.rCheckoutQueues[i].customers.size() < min){
+			CheckoutCounter c = model.rCheckouts[i]; 
+			if (c != null && c.status == CheckoutCounter.Status.BUSY || c.status == CheckoutCounter.Status.NOT_BUSY){
+				if (model.rCheckoutQueues[i].size() < min){
 					minIndex = i;
 				}
 			}
 		}
 		
-		model.rCheckoutQueues[minIndex].customers.add(icCustomer);
+		model.rCheckoutQueues[minIndex].add(icCustomer);
 	}
 
 

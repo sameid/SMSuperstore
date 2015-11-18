@@ -24,8 +24,8 @@ public class SMSuperstore extends AOSimulationModel
 	// Define the reference variables to the various 
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
-	protected Checkout[] rCheckouts = new Checkout[20];
-	protected CheckoutQueue[] rCheckoutQueues = new CheckoutQueue[20];
+	protected CheckoutCounter[] rCheckouts = new CheckoutCounter[20];
+	protected Queue<Customer>[] rCheckoutQueues = (LinkedList<Customer>[]) new LinkedList[20];
 	
 	protected Supervisor rSupervisor = new Supervisor();
 	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
@@ -83,8 +83,8 @@ public class SMSuperstore extends AOSimulationModel
 	protected boolean scanPreconditions (){
 		boolean state = false;
 		// Check preconditions of Conditional Activities
-		if (Serving.precondition(this)){
-			Serving act = new Serving(this);
+		if (Checkout.precondition(this)){
+			Checkout act = new Checkout(this);
 			act.startingEvent();
 			scheduleActivity(act);
 			state = true;

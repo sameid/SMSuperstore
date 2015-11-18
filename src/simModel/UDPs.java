@@ -28,7 +28,7 @@ class UDPs
 	protected int CanCheckoutServe (){
 		
 		for (int i = 0 ; i < model.rCheckouts.length ; i++){
-			if (model.rCheckouts[i].status == Checkout.Status.NOT_BUSY && !model.rCheckoutQueues[i].customers.isEmpty()){
+			if (model.rCheckouts[i].status == CheckoutCounter.Status.NOT_BUSY && !model.rCheckoutQueues[i].isEmpty()){
 				return i;
 			}
 		}
@@ -39,7 +39,7 @@ class UDPs
 	protected int ShouldCashierBag (){
 		
 		for (int i = 0; i < model.rCheckouts.length ; i++){
-			Checkout c = model.rCheckouts[i];
+			CheckoutCounter c = model.rCheckouts[i];
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& !c.currentCustomer.bagged
@@ -53,11 +53,11 @@ class UDPs
 	
 	protected int CanCustomerPay (){
 		for (int i = 0; i < model.rCheckouts.length ; i++){
-			Checkout c = model.rCheckouts[i];
+			CheckoutCounter c = model.rCheckouts[i];
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& c.currentCustomer.bagged
-					&& c.status == Checkout.Status.BUSY
+					&& c.status == CheckoutCounter.Status.BUSY
 					&& c.currentCustomer.paymentType != Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
 				return i;
 			}

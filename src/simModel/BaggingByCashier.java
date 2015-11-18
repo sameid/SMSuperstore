@@ -27,7 +27,7 @@ class BaggingByCashier extends ConditionalActivity{
 		// TODO Auto-generated method stub
 		this.id = model.udp.ShouldCashierBag();
 		icCustomer = model.rCheckouts[this.id].currentCustomer;
-		model.rCheckouts[this.id].status = Checkout.Status.BUSY;
+		model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
 		
 	}
 
@@ -37,7 +37,7 @@ class BaggingByCashier extends ConditionalActivity{
 		icCustomer.bagged = true;
 		if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
 			model.rSupervisorQueue.add(icCustomer);
-			model.rCheckouts[id].status = Checkout.Status.NOT_BUSY;
+			model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
 		}
 		
 	}

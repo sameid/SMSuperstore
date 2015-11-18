@@ -1,31 +1,61 @@
 package simModel;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import absmodJ.ConditionalActivity;
 
+class Checkout extends ConditionalActivity{
 
-class Checkout {
+	SMSuperstore model;
+	Customer icCustomer;
+	int id;
 	
-	protected int id;
-	
-	protected enum Status {
-		BUSY,
-		NOT_BUSY,
-		UNATTENDED,
-		CLOSING
-	}
-	protected Status status;
-	
-	protected Customer currentCustomer;
-	protected boolean baggerPresent = false;
-	
-	public void setCustomer (Customer newCustomer){
-		currentCustomer = newCustomer;
+	public Checkout (SMSuperstore model){
+		this.model = model;
 	}
 	
-	public Customer getCustomer (){
-		return currentCustomer;
+	protected static boolean precondition(SMSuperstore model){
+		return model.udp.CanCheckoutServe() != Constants.NONE;
 	}
 	
+	@Override
+	protected double duration() {
+		int numOfItems = icCustomer.numberOfItems;
+		return model.rvp.uCheckoutTm(numOfItems);
+	}
+
+	@Override
+	public void startingEvent() {
+		// TODO Auto-generated method stub
+		this.id = model.udp.CanCheckoutServe();
+		icCustomer = model.rCheckoutQueues[id].remove();
+		model.rCheckouts[id].currentCustomer = icCustomer;
+		model.rCheckouts[id].status = CheckoutCounter.Status.BUSY;
+		if (model.rgBaggers.numAvailable > 0){
+			model.rgBaggers.numAvailable--;
+			model.rCheckouts[id].baggerPresent = true;
+		}
+		
+	}
+
+	@Override
+	protected void terminatingEvent() {
+		// TODO Auto-generated method stub
+
+		icCustomer.served = true;
+		
+		if (model.rCheckouts[id].baggerPresent){
+			model.rgBaggers.numAvailable++;
+			model.rCheckouts[id].baggerPresent = false;
+			icCustomer.bagged = true;
+			
+			if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
+				model.rSupervisorQueue.add(icCustomer);
+				model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+				model.rCheckouts[id].currentCustomer = null;
+			}
+		}
+		
+		
+		
+	}
+
 }

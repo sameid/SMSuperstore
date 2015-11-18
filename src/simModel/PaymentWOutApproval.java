@@ -31,7 +31,7 @@ class PaymentWOutApproval extends ConditionalActivity{
 	@Override
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
-		model.rCheckouts[id].status = Checkout.Status.NOT_BUSY;
+		model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
 		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
 		model.output.numServed++;
 		icCustomer = null;
