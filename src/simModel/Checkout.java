@@ -7,6 +7,8 @@ import java.util.Queue;
 
 class Checkout {
 	
+	protected int id;
+	
 	protected enum Status {
 		BUSY,
 		NOT_BUSY,
@@ -15,7 +17,6 @@ class Checkout {
 	}
 	protected Status status;
 	
-	protected Queue<Customer> rCheckoutQueue = new LinkedList<Customer>();
 	protected Customer currentCustomer;
 	protected boolean baggerPresent = false;
 	
@@ -25,10 +26,6 @@ class Checkout {
 	
 	public Customer getCustomer (){
 		return currentCustomer;
-	}
-	
-	public void addCustomerToQueue (Customer c){
-		rCheckoutQueue.add(c);
 	}
 	
 }

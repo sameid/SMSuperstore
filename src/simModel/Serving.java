@@ -5,34 +5,33 @@ import absmodJ.ConditionalActivity;
 class Serving extends ConditionalActivity{
 
 	SMSuperstore model;
-	Checkout checkout;
+	Customer icCustomer;
+	int id;
 	
-	public Serving (SMSuperstore model, Checkout checkout){
+	public Serving (SMSuperstore model){
 		this.model = model;
-		this.checkout = checkout;
 	}
 	
-	protected static boolean precondition(Checkout checkout){
-		if (checkout.status == Checkout.Status.NOT_BUSY && !checkout.rCheckoutQueue.isEmpty()) return true;
-		return false;
+	protected static boolean precondition(SMSuperstore model){
+		return model.udp.CanCheckoutServe() != -1;
 	}
 	
 	@Override
 	protected double duration() {
-		int numOfItems = checkout.currentCustomer.numberOfItems;
-		return model.rvp.uCheckoutTm(numOfItems) + model.rvp.uPriceCheckTm(numOfItems);
+		int numOfItems = icCustomer.numberOfItems;
+		return model.rvp.uCheckoutTm(numOfItems);
 	}
 
 	@Override
 	public void startingEvent() {
 		// TODO Auto-generated method stub
-		Customer icCustomer = null;
-		icCustomer = checkout.rCheckoutQueue.remove();
-		if (icCustomer != null ) checkout.currentCustomer = icCustomer;
-		checkout.status = Checkout.Status.BUSY;
+		this.id = model.udp.CanCheckoutServe();
+		icCustomer = model.rCheckoutQueues[id].customers.remove();
+		model.rCheckouts[id].currentCustomer = icCustomer;
+		model.rCheckouts[id].status = Checkout.Status.BUSY;
 		if (model.rgBaggers.numAvailable > 0){
 			model.rgBaggers.numAvailable--;
-			checkout.baggerPresent = true;
+			model.rCheckouts[id].baggerPresent = true;
 		}
 		
 	}
@@ -41,20 +40,21 @@ class Serving extends ConditionalActivity{
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
 
-		Customer icCustomer = checkout.currentCustomer;
-		
 		icCustomer.served = true;
 		
-		if (checkout.baggerPresent){
+		if (model.rCheckouts[id].baggerPresent){
 			model.rgBaggers.numAvailable++;
-			checkout.baggerPresent = false;
+			model.rCheckouts[id].baggerPresent = false;
 			icCustomer.bagged = true;
+			
+			if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
+				model.rSupervisorQueue.add(icCustomer);
+				model.rCheckouts[id].status = Checkout.Status.NOT_BUSY;
+				model.rCheckouts[id].currentCustomer = null;
+			}
 		}
 		
-		if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
-			model.rSupervisorQueue.add(icCustomer);
-			checkout.status = Checkout.Status.NOT_BUSY;
-		}
+		
 		
 	}
 

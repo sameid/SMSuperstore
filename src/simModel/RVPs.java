@@ -107,8 +107,19 @@ class RVPs
 	private final double CHECKOUT_MEAN = 0.05;
 	private final double CHECKOUT_STANDARD_DEVIATION = 0.0125;
 	
+	MersenneTwister pricecheckRandGen;
+	private final double PROP_PRICE_CHECK = 0.013;
+	private final double PROP_NO_CHECK = 0.987;
+	
 	protected double uCheckoutTm(int numOfItems){
-		return numOfItems * (checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION));
+		
+		double addedTime = 0.0;
+		for (int i = 0 ; i < numOfItems ; i++){
+			double randNum = pricecheckRandGen.nextDouble(); 
+			if (randNum <= PROP_PRICE_CHECK) addedTime += 2.2;
+		}
+		
+		return (numOfItems * (checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION))) + addedTime;
 	}
 
 	/****************************/
@@ -152,20 +163,5 @@ class RVPs
 //		return validationTimeDist.nextDouble();
 //	}
 
-	/****************************/
-	
-	MersenneTwister pricecheckRandGen;
-	private final double PROP_PRICE_CHECK = 0.013;
-	private final double PROP_NO_CHECK = 0.987;
-	
-	protected double uPriceCheckTm(int numOfItems){
-		double addedTime = 0.0;
-		for (int i = 0 ; i < numOfItems ; i++){
-			double randNum = pricecheckRandGen.nextDouble(); 
-			if (randNum <= PROP_PRICE_CHECK) addedTime += 2.2;
-		}
-		return addedTime;
-		
-	}
-	
+
 }

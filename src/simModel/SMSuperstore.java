@@ -24,7 +24,8 @@ public class SMSuperstore extends AOSimulationModel
 	// Define the reference variables to the various 
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
-	protected ArrayList<Checkout> rCheckouts = new ArrayList<Checkout>();
+	protected Checkout[] rCheckouts = new Checkout[20];
+	protected CheckoutQueue[] rCheckoutQueues = new CheckoutQueue[20];
 	protected Supervisor rSupervisor = new Supervisor();
 	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
 	protected Baggers rgBaggers = new Baggers();

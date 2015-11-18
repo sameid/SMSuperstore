@@ -25,7 +25,12 @@ class Initialise extends ScheduledAction
 //			model.rCheckouts.get(i).rCheckoutQueue.clear();
 //		}
 //		model.rSupervisorQueue.clear();
-		model.rCheckouts.clear(); 
+		
+		for (int i = 0 ; i < model.rCheckouts.length ; i++){
+			model.rCheckouts[i] = new Checkout();
+			model.rCheckoutQueues[i] = new CheckoutQueue();
+		}
+		
 		model.output.numLongWait = 0;
 		model.output.numServed = 0;
 	}

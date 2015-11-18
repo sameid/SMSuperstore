@@ -2,44 +2,40 @@ package simModel;
 
 import absmodJ.ConditionalActivity;
 
-class PaymentWApproval extends ConditionalActivity{
+class PaymentWOutApproval extends ConditionalActivity{
 
 	SMSuperstore model;
 	Customer icCustomer;
+	int id;
 	
-	
-	public PaymentWApproval (SMSuperstore model){
+	public PaymentWOutApproval (SMSuperstore model){
 		this.model = model;
 	}
 	
-	protected static boolean precondition (SMSuperstore model){
-		
-		return model.rSupervisor.status == Supervisor.Status.NOT_BUSY && !model.rSupervisorQueue.isEmpty();
-		
+	protected static boolean precondition(SMSuperstore model){
+		return model.udp.CanCustomerPay() != -1;
 	}
 	
 	@Override
 	protected double duration() {
 		// TODO Auto-generated method stub
-		
-		return model.rvp.uPaymentTm(model.rSupervisor.currentCustomer.paymentType);
+		return model.rvp.uPaymentTm(model.rCheckouts[this.id].currentCustomer.paymentType);
 	}
 
 	@Override
 	public void startingEvent() {
 		// TODO Auto-generated method stub
-		model.rSupervisor.status = Supervisor.Status.BUSY; 
-		icCustomer = model.rSupervisorQueue.remove();
-		
+		this.icCustomer = model.rCheckouts[this.id].currentCustomer;	
 	}
 
 	@Override
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
+		model.rCheckouts[id].status = Checkout.Status.NOT_BUSY;
 		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
 		model.output.numServed++;
 		icCustomer = null;
-		model.rSupervisor.currentCustomer = null;
+		model.rCheckouts[id].currentCustomer = null;
 		
 	}
 
