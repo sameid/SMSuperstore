@@ -1,6 +1,5 @@
 package simModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
@@ -31,6 +30,8 @@ public class SMSuperstore extends AOSimulationModel
 	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
 	
 	protected Baggers rgBaggers = new Baggers();
+	
+	protected double closingTime;
 
 	/* Input Variables */
 	// Define any Independent Input Varaibles here
@@ -51,11 +52,10 @@ public class SMSuperstore extends AOSimulationModel
 	public SMSuperstore(double t0time, double tftime, /*define other args,*/ Seeds sd)
 	{
 		// Initialise parameters here
+		closingTime = tftime;
 		
 		// Create RVP object with given seed
 		rvp = new RVPs(this,sd);
-		
-		// rgCounter and qCustLine objects created in Initalise Action
 		
 		// Initialise the simulation model
 		initAOSimulModel(t0time,tftime);   
@@ -115,16 +115,25 @@ public class SMSuperstore extends AOSimulationModel
 		
 	}
 
-	boolean traceflag = false;
+	protected boolean implicitStopCondition() // termination explicit
+	{
+//		boolean retVal = false;
+//		if ()// && rgCounter.getN() == 0)
+//			retVal = true;
+		return (getClock() >= closingTime);
+	}
+	
+	boolean traceflag = true;
 	protected void eventOccured()
 	{
 		if(traceflag)
 		{
 			// Can add other trace/log code to monitor the status of the system
 			// See examples for suggestions on setup logging
+			System.out.println(getClock());
 			this.showSBL();
-		    // PriorityQueue<SBNotice> sbl = this.getCopySBL();
-			// explicitShowSBL(sbl);
+//		     PriorityQueue<SBNotice> sbl = this.getCopySBL();
+//			 explicitShowSBL(sbl);
 
 		}
 

@@ -17,12 +17,14 @@ class RVPs
 	private Exponential interArrDist;  // Exponential distribution for interarrival times
 	private final double WMEAN1=30.0;// !! Customer Arrival every 30 minutes
 	
+
+	
 	// Constructor
 	protected RVPs(SMSuperstore model, Seeds sd) 
 	{ 
 		this.model = model; 
 		// Set up distribution functions
-		interArrDist = new Exponential(1.0/WMEAN1,  new MersenneTwister(sd.getSeed()));
+		interArrDist = new Exponential(0.0,  new MersenneTwister(sd.getSeed()));
 		
 		numItemDist1 = new Normal(ITEMS_PER_CUSTOMER_MEAN_1, ITEMS_PER_CUSTOMER_SD_1, new MersenneTwister(sd.getSeed()));//need to hook up seeds
 		numItemDist2 = new Normal(ITEMS_PER_CUSTOMER_MEAN_2, ITEMS_PER_CUSTOMER_SD_2, new MersenneTwister(sd.getSeed()));
@@ -39,14 +41,34 @@ class RVPs
 	
 	/****************************/
 	
+	private double[] interArrDistMeans = {
+			95.0, 100.0, 120.0, 150.0, 160.0, 150.0, 
+			160.0, 110.0,  105.0,  95.0,  125.0, 150.0, 
+			155.0, 95.0, 70.0, 60.0
+	};
+	
+	private double[] timePeriods = {
+		30.0, 60.0, 90.0, 120.0, 150.0, 180.0, 210.0, 240.0, 270.0, 300.0, 330.0, 360.0, 390.0, 420.0, 450.0, 480.0	
+	};
+	
 	protected double duC()  // for getting next value of duInput
 	{
 	    double nxtInterArr;
-
-        nxtInterArr = interArrDist.nextDouble();
-	    // Note that interarrival time is added to current
-	    // clock value to get the next arrival time.
-	    return(nxtInterArr+model.getClock());
+	    double mean = 0.0;
+	    
+	    for (int i = 0 ; i < timePeriods.length ; i ++){
+	    	if (model.getClock() <= timePeriods[i]){
+	    		mean = interArrDistMeans[i];
+	    		mean = 60.0/mean;
+	    		break;
+	    	}
+	    }
+	    
+        nxtInterArr = interArrDist.nextDouble(1.0/mean) + model.getClock();
+        if (nxtInterArr > model.closingTime){
+        	nxtInterArr = -1.0;
+        }
+	    return(nxtInterArr);
 	}
 	
 	/****************************/

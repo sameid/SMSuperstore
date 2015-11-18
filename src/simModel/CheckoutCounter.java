@@ -7,8 +7,6 @@ import java.util.Queue;
 
 class CheckoutCounter {
 	
-	protected int id;
-	
 	protected enum Status {
 		BUSY,
 		NOT_BUSY,
