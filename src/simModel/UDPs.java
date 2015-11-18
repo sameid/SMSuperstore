@@ -32,8 +32,8 @@ class UDPs
 				return i;
 			}
 		}
-		
-		return -1;
+
+		return Constants.NONE;
 	}
 	
 	protected int ShouldCashierBag (){
@@ -47,8 +47,8 @@ class UDPs
 				return i;
 			}
 		}
-		
-		return -1;
+
+		return Constants.NONE;
 	}
 	
 	protected int CanCustomerPay (){
@@ -63,7 +63,7 @@ class UDPs
 			}
 		}
 		
-		return -1;
+		return Constants.NONE;
 	}
 	
 }

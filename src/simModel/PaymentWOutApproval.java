@@ -13,7 +13,7 @@ class PaymentWOutApproval extends ConditionalActivity{
 	}
 	
 	protected static boolean precondition(SMSuperstore model){
-		return model.udp.CanCustomerPay() != -1;
+		return model.udp.CanCustomerPay() != Constants.NONE;
 	}
 	
 	@Override

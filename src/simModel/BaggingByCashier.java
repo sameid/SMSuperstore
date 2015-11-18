@@ -13,7 +13,7 @@ class BaggingByCashier extends ConditionalActivity{
 	}
 	
 	public static boolean precondition (SMSuperstore model){
-		return model.udp.ShouldCashierBag() != -1;
+		return model.udp.ShouldCashierBag() != Constants.NONE;
 	}
 	
 	@Override

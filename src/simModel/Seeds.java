@@ -4,16 +4,18 @@ import cern.jet.random.engine.RandomSeedGenerator;
 
 public class Seeds 
 {
-	int seed1;   // comment 1
-	int seed2;   // comment 2
-	int seed3;   // comment 3
-	int seed4;   // comment 4
+	int[] seeds = new int[10];
+	int index = 0;
 
 	public Seeds(RandomSeedGenerator rsg)
 	{
-		seed1=rsg.nextSeed();
-		seed2=rsg.nextSeed();
-		seed3=rsg.nextSeed();
-		seed4=rsg.nextSeed();
+		for (int i = 0 ; i < seeds.length; i++) seeds[i] = rsg.nextSeed();
+		this.index = 0;
+	}
+	
+	public int getSeed(){
+		int r = seeds[index];
+		index++;
+		return r;
 	}
 }

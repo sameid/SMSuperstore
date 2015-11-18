@@ -26,8 +26,10 @@ public class SMSuperstore extends AOSimulationModel
 	// Objects can be created here or in the Initialise Action
 	protected Checkout[] rCheckouts = new Checkout[20];
 	protected CheckoutQueue[] rCheckoutQueues = new CheckoutQueue[20];
+	
 	protected Supervisor rSupervisor = new Supervisor();
 	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
+	
 	protected Baggers rgBaggers = new Baggers();
 
 	/* Input Variables */
@@ -61,6 +63,9 @@ public class SMSuperstore extends AOSimulationModel
 		     // Schedule the first arrivals and employee scheduling
 		Initialise init = new Initialise(this);
 		scheduleAction(init);  // Should always be first one scheduled.
+		//need staff change action
+		Arrivals arrivalsAction = new Arrivals(this);
+		scheduleAction(arrivalsAction);
 		// Schedule other scheduled actions and acitvities here
 	}
 
@@ -71,9 +76,43 @@ public class SMSuperstore extends AOSimulationModel
 	protected void testPreconditions(Behaviour behObj)
 	{
 		reschedule (behObj);
-		// Check preconditions of Conditional Activities
-
+		while(scanPreconditions()) {}
 		// Check preconditions of Interruptions in Extended Activities
+	}
+	
+	protected boolean scanPreconditions (){
+		boolean state = false;
+		// Check preconditions of Conditional Activities
+		if (Serving.precondition(this)){
+			Serving act = new Serving(this);
+			act.startingEvent();
+			scheduleActivity(act);
+			state = true;
+		}
+		
+		if (BaggingByCashier.precondition(this)){
+			BaggingByCashier act = new BaggingByCashier(this);
+			act.startingEvent();
+			scheduleActivity(act);
+			state = true;
+		}
+		
+		if (PaymentWApproval.precondition(this)){
+			PaymentWApproval act = new PaymentWApproval(this);
+			act.startingEvent();
+			scheduleActivity(act);
+			state = true;
+		}
+		
+		if (PaymentWOutApproval.precondition(this)){
+			PaymentWOutApproval act = new PaymentWOutApproval(this);
+			act.startingEvent();
+			scheduleActivity(act);
+			state = true;
+		}
+		
+		return state;
+		
 	}
 
 	boolean traceflag = false;

@@ -22,18 +22,18 @@ class RVPs
 	{ 
 		this.model = model; 
 		// Set up distribution functions
-		interArrDist = new Exponential(1.0/WMEAN1,  new MersenneTwister(sd.seed1));
+		interArrDist = new Exponential(1.0/WMEAN1,  new MersenneTwister(sd.getSeed()));
 		
-		numItemDist1 = new Normal(ITEMS_PER_CUSTOMER_MEAN_1, ITEMS_PER_CUSTOMER_SD_1, null);//need to hook up seeds
-		numItemDist2 = new Normal(ITEMS_PER_CUSTOMER_MEAN_2, ITEMS_PER_CUSTOMER_SD_2, null);
+		numItemDist1 = new Normal(ITEMS_PER_CUSTOMER_MEAN_1, ITEMS_PER_CUSTOMER_SD_1, new MersenneTwister(sd.getSeed()));//need to hook up seeds
+		numItemDist2 = new Normal(ITEMS_PER_CUSTOMER_MEAN_2, ITEMS_PER_CUSTOMER_SD_2, new MersenneTwister(sd.getSeed()));
 		
-		paymentTimeDist = new Normal(0, 0, null);
+		paymentTimeDist = new Normal(0, 0,  new MersenneTwister(sd.getSeed()));
 //		validationTimeDist = new Normal(VALIDATION_MEAN, VALIDATION_SD, null);
 		
-		paymentTypeRandGen = new MersenneTwister(sd.seed1);
-		checkoutTimeDist = new Normal(0,0,null);
-		baggingTimeDist = new Normal(0,0,null);
-		pricecheckRandGen = new MersenneTwister(sd.seed1);
+		paymentTypeRandGen = new MersenneTwister(sd.getSeed());
+		checkoutTimeDist = new Normal(0,0, new MersenneTwister(sd.getSeed()));
+		baggingTimeDist = new Normal(0,0, new MersenneTwister(sd.getSeed()));
+		pricecheckRandGen = new MersenneTwister(sd.getSeed());
 		
 	}
 	

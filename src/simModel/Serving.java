@@ -13,7 +13,7 @@ class Serving extends ConditionalActivity{
 	}
 	
 	protected static boolean precondition(SMSuperstore model){
-		return model.udp.CanCheckoutServe() != -1;
+		return model.udp.CanCheckoutServe() != Constants.NONE;
 	}
 	
 	@Override
