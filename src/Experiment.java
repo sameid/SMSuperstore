@@ -10,7 +10,7 @@ class Experiment
 {
    public static void main(String[] args)
    {
-       int i, NUMRUNS = 1; 
+       int i, NUMRUNS = 30; 
        double startTime=0.0, endTime=480.0;
        Seeds[] sds = new Seeds[NUMRUNS];
        SMSuperstore mname;  // Simulation object
