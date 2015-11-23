@@ -34,6 +34,9 @@ class PaymentWOutApproval extends ConditionalActivity{
 		model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
 		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
 		model.output.numServed++;
+		
+		model.output.propLongWait = model.output.numLongWait/model.output.numServed;
+		
 		icCustomer = null;
 		model.rCheckouts[id].currentCustomer = null;
 		

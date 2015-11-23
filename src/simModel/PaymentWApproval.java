@@ -38,6 +38,9 @@ class PaymentWApproval extends ConditionalActivity{
 		// TODO Auto-generated method stub
 		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
 		model.output.numServed++;
+		
+		model.output.propLongWait = model.output.numLongWait/model.output.numServed;
+		
 		icCustomer = null;
 		model.rSupervisor.currentCustomer = null;
 		

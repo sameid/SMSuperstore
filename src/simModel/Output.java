@@ -17,5 +17,6 @@ class Output
     // SSOVs
 	int numServed;
 	int numLongWait;
+	int propLongWait;
 	
 }
