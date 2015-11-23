@@ -5,7 +5,8 @@ import simModel.*;
 import cern.jet.random.engine.*;
 
 // Main Method: Experiments
-// 
+//
+//Validation Experiment
 class Experiment
 {
    public static void main(String[] args)
@@ -19,15 +20,31 @@ class Experiment
        RandomSeedGenerator rsg = new RandomSeedGenerator();
        for(i=0 ; i<NUMRUNS ; i++) sds[i] = new Seeds(rsg);
        
+  
        // Loop for NUMRUN simulation runs for each case
-       // Case 1
+       
+       // Case 1: Few employees
        System.out.println(" Case 1");
+       
+       int[] lightCashierSchedule = {4, 1, 3};
+       int[] lightBaggerSchedule = {1, 1, 1};
+       
        for(i=0 ; i < NUMRUNS ; i++)
        {
-          mname = new SMSuperstore(startTime,endTime,sds[i]);
+          mname = new SMSuperstore(startTime,endTime, lightCashierSchedule, lightBaggerSchedule, sds[i], true);
           mname.runSimulation();
-          // See examples for hints on collecting output
-          // and developping code for analysis
+       }
+       
+       // Case 1: Lots of employees
+       System.out.println(" Case 2");
+       
+       int[] heavyCashierSchedule = {15, 5, 15};
+       int[] heavyBaggerSchedule = {15, 5, 15};
+       
+       for(i=0 ; i < NUMRUNS ; i++)
+       {
+          mname = new SMSuperstore(startTime,endTime,heavyCashierSchedule, heavyBaggerSchedule, sds[i], true);
+          mname.runSimulation();
        }
    }
 }

@@ -16,7 +16,9 @@ public class SMSuperstore extends AOSimulationModel
 {
 	// Constants available from Constants class
 	/* Parameter */
-        // Define the parameters
+    protected int[] cashierSchedule = new int[3]; 
+    
+    //see Baggers class, RG.Baggers.schedule 
 
 	/*-------------Entity Data Structures-------------------*/
 	/* Group and Queue Entities */
@@ -49,9 +51,15 @@ public class SMSuperstore extends AOSimulationModel
 
 
 	// Constructor
-	public SMSuperstore(double t0time, double tftime, /*define other args,*/ Seeds sd)
+	public SMSuperstore(double t0time, double tftime, int [] cashierSchedule, int [] baggerSchedule, Seeds sd, boolean traceFlag)
 	{
-		// Initialise parameters here
+		// Turn trancing on if traceFlag is true
+		this.traceFlag = traceFlag;
+		
+		//parameters
+		this.cashierSchedule = cashierSchedule;
+		this.rgBaggers.schedule = baggerSchedule;
+		
 		closingTime = tftime;
 		
 		// Create RVP object with given seed
@@ -63,10 +71,11 @@ public class SMSuperstore extends AOSimulationModel
 		     // Schedule the first arrivals and employee scheduling
 		Initialise init = new Initialise(this);
 		scheduleAction(init);  // Should always be first one scheduled.
-		//need staff change action
+		StaffChange staffChangeAction = new StaffChange(this);
+		scheduleAction(staffChangeAction); // change in employees
 		Arrivals arrivalsAction = new Arrivals(this);
 		scheduleAction(arrivalsAction);
-		// Schedule other scheduled actions and acitvities here
+		// Schedule other scheduled actions and activities here
 	}
 
 	/************  Implementation of Data Modules***********/	
@@ -123,13 +132,12 @@ public class SMSuperstore extends AOSimulationModel
 		return (getClock() >= closingTime);
 	}
 	
-	boolean traceflag = true;
+	boolean traceFlag = true;
 	protected void eventOccured()
 	{
-		if(traceflag)
+		if(traceFlag)
 		{
 			// Can add other trace/log code to monitor the status of the system
-			// See examples for suggestions on setup logging
 			System.out.println(getClock());
 			this.showSBL();
 //		     PriorityQueue<SBNotice> sbl = this.getCopySBL();

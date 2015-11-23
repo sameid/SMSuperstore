@@ -18,6 +18,8 @@ class CheckoutCounter {
 	protected Customer currentCustomer;
 	protected boolean baggerPresent = false;
 	
+	protected int scheduleSlot = 0;
+	
 	public void setCustomer (Customer newCustomer){
 		currentCustomer = newCustomer;
 	}
