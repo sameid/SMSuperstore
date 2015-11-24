@@ -96,29 +96,29 @@ public class SMSuperstore extends AOSimulationModel
 			Checkout act = new Checkout(this);
 			act.startingEvent();
 			scheduleActivity(act);
-			state = true;
+//			state = true;
 		}
 		
-//		if (BaggingByCashier.precondition(this)){
-//			BaggingByCashier act = new BaggingByCashier(this);
-//			act.startingEvent();
-//			scheduleActivity(act);
-////			state = true;
-//		}
-//		
-//		if (PaymentWApproval.precondition(this)){
-//			PaymentWApproval act = new PaymentWApproval(this);
-//			act.startingEvent();
-//			scheduleActivity(act);
+		if (BaggingByCashier.precondition(this)){
+			BaggingByCashier act = new BaggingByCashier(this);
+			act.startingEvent();
+			scheduleActivity(act);
 //			state = true;
-//		}
+		}
 		
-//		if (PaymentWOutApproval.precondition(this)){
-//			PaymentWOutApproval act = new PaymentWOutApproval(this);
-//			act.startingEvent();
-//			scheduleActivity(act);
+		if (PaymentWApproval.precondition(this)){
+			PaymentWApproval act = new PaymentWApproval(this);
+			act.startingEvent();
+			scheduleActivity(act);
 //			state = true;
-//		}
+		}
+		
+		if (PaymentWOutApproval.precondition(this)){
+			PaymentWOutApproval act = new PaymentWOutApproval(this);
+			act.startingEvent();
+			scheduleActivity(act);
+//			state = true;
+		}
 		
 		return state;
 		
@@ -138,7 +138,7 @@ public class SMSuperstore extends AOSimulationModel
 		if(traceFlag)
 		{
 			// Can add other trace/log code to monitor the status of the system
-			System.out.println("Timestamp: " + getClock() );
+			System.out.println("Timestamp: " + getClock() + " PropLongWait: " + output.propLongWait[1]);
 //			this.showSBL();
 //		     PriorityQueue<SBNotice> sbl = this.getCopySBL();
 //			 explicitShowSBL(sbl);

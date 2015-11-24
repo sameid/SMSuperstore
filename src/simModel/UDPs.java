@@ -76,8 +76,8 @@ class UDPs
 				break;
 			}
 		}
-		
-		if (model.getClock() - current.startWait > 15) model.output.numLongWait[index]++;
+
+		if ((model.getClock() - current.startWait) > 15.0) model.output.numLongWait[index]++;
 		model.output.numServed[index]++;
 		model.output.propLongWait[index] = model.output.numLongWait[index]/model.output.numServed[index];
 		
