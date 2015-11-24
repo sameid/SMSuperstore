@@ -13,13 +13,15 @@ class BaggingByCashier extends ConditionalActivity{
 	}
 	
 	public static boolean precondition (SMSuperstore model){
-		return model.udp.ShouldCashierBag() != Constants.NONE;
+		
+		int test = model.udp.ShouldCashierBag();
+		return test!= Constants.NONE;
 	}
 	
 	@Override
 	protected double duration() {
 		// TODO Auto-generated method stub
-		return model.rvp.uBaggingTm(model.rCheckouts[this.id].currentCustomer.numberOfItems);
+		return model.rvp.uBaggingTm(icCustomer.numberOfItems);
 	}
 
 	@Override

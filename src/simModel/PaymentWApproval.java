@@ -21,25 +21,23 @@ class PaymentWApproval extends ConditionalActivity{
 	@Override
 	protected double duration() {
 		// TODO Auto-generated method stub
-		
 		return model.rvp.uPaymentTm(model.rSupervisor.currentCustomer.paymentType);
 	}
 
 	@Override
 	public void startingEvent() {
 		// TODO Auto-generated method stub
-		model.rSupervisor.status = Supervisor.Status.BUSY; 
 		icCustomer = model.rSupervisorQueue.remove();
-		
+		model.rSupervisor.status = Supervisor.Status.BUSY; 
 	}
 
 	@Override
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
-		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
-		model.output.numServed++;
 		
-		model.output.propLongWait = model.output.numLongWait/model.output.numServed;
+		model.rSupervisor.status = Supervisor.Status.NOT_BUSY;
+
+		model.udp.UpdateOutputs(this.icCustomer);
 		
 		icCustomer = null;
 		model.rSupervisor.currentCustomer = null;

@@ -26,8 +26,8 @@ class Checkout extends ConditionalActivity{
 	public void startingEvent() {
 		// TODO Auto-generated method stub
 		this.id = model.udp.CanCheckoutServe();
-		icCustomer = model.rCheckoutQueues[id].remove();
-		model.rCheckouts[id].currentCustomer = icCustomer;
+		this.icCustomer = model.rCheckoutQueues[id].remove();
+		model.rCheckouts[id].currentCustomer = this.icCustomer;
 		model.rCheckouts[id].status = CheckoutCounter.Status.BUSY;
 		if (model.rgBaggers.numAvailable > 0){
 			model.rgBaggers.numAvailable--;
@@ -39,7 +39,6 @@ class Checkout extends ConditionalActivity{
 	@Override
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
-
 		icCustomer.served = true;
 		
 		if (model.rCheckouts[id].baggerPresent){
@@ -53,8 +52,6 @@ class Checkout extends ConditionalActivity{
 				model.rCheckouts[id].currentCustomer = null;
 			}
 		}
-		
-		
 		
 	}
 

@@ -48,8 +48,8 @@ public class SMSuperstore extends AOSimulationModel
 	
 	// Output values - define the public methods that return values
 	// required for experimentation.
-
-
+	
+	
 	// Constructor
 	public SMSuperstore(double t0time, double tftime, int [] cashierSchedule, int [] baggerSchedule, Seeds sd, boolean traceFlag)
 	{
@@ -99,26 +99,26 @@ public class SMSuperstore extends AOSimulationModel
 			state = true;
 		}
 		
-		if (BaggingByCashier.precondition(this)){
-			BaggingByCashier act = new BaggingByCashier(this);
-			act.startingEvent();
-			scheduleActivity(act);
-			state = true;
-		}
+//		if (BaggingByCashier.precondition(this)){
+//			BaggingByCashier act = new BaggingByCashier(this);
+//			act.startingEvent();
+//			scheduleActivity(act);
+////			state = true;
+//		}
+//		
+//		if (PaymentWApproval.precondition(this)){
+//			PaymentWApproval act = new PaymentWApproval(this);
+//			act.startingEvent();
+//			scheduleActivity(act);
+//			state = true;
+//		}
 		
-		if (PaymentWApproval.precondition(this)){
-			PaymentWApproval act = new PaymentWApproval(this);
-			act.startingEvent();
-			scheduleActivity(act);
-			state = true;
-		}
-		
-		if (PaymentWOutApproval.precondition(this)){
-			PaymentWOutApproval act = new PaymentWOutApproval(this);
-			act.startingEvent();
-			scheduleActivity(act);
-			state = true;
-		}
+//		if (PaymentWOutApproval.precondition(this)){
+//			PaymentWOutApproval act = new PaymentWOutApproval(this);
+//			act.startingEvent();
+//			scheduleActivity(act);
+//			state = true;
+//		}
 		
 		return state;
 		
@@ -138,8 +138,8 @@ public class SMSuperstore extends AOSimulationModel
 		if(traceFlag)
 		{
 			// Can add other trace/log code to monitor the status of the system
-			System.out.println(getClock());
-			this.showSBL();
+			System.out.println("Timestamp: " + getClock() );
+//			this.showSBL();
 //		     PriorityQueue<SBNotice> sbl = this.getCopySBL();
 //			 explicitShowSBL(sbl);
 

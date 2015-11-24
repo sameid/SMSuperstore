@@ -169,10 +169,11 @@ class RVPs
 	
 	private Normal baggingTimeDist;
 	private final double BAGGING_MEAN = 0.021;
-	private final double BAGGING_STANDARD_DEVIATION = 0.20;//need to fix 20%
+	private final double BAGGING_STANDARD_DEVIATION = 0.0042;//need to fix 20%
 	
 	protected double uBaggingTm(int numOfItems){
-		return numOfItems * (checkoutTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION));
+		double test = (checkoutTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION));
+		return numOfItems * test;
 	}
 
 	/****************************/

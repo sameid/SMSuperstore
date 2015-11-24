@@ -19,23 +19,23 @@ class PaymentWOutApproval extends ConditionalActivity{
 	@Override
 	protected double duration() {
 		// TODO Auto-generated method stub
-		return model.rvp.uPaymentTm(model.rCheckouts[this.id].currentCustomer.paymentType);
+		return model.rvp.uPaymentTm(this.icCustomer.paymentType);
 	}
 
 	@Override
 	public void startingEvent() {
 		// TODO Auto-generated method stub
+		this.id = model.udp.CanCustomerPay();
 		this.icCustomer = model.rCheckouts[this.id].currentCustomer;	
 	}
 
 	@Override
 	protected void terminatingEvent() {
 		// TODO Auto-generated method stub
+
 		model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
-		if (model.getClock() - icCustomer.startWait > 15) model.output.numLongWait++;
-		model.output.numServed++;
-		
-		model.output.propLongWait = model.output.numLongWait/model.output.numServed;
+
+		model.udp.UpdateOutputs(this.icCustomer);
 		
 		icCustomer = null;
 		model.rCheckouts[id].currentCustomer = null;

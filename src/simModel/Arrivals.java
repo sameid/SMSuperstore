@@ -22,16 +22,22 @@ public class Arrivals extends ScheduledAction{
 		icCustomer.paymentType = model.rvp.uPaymentType(icCustomer.numberOfItems);
 		icCustomer.startWait = model.getClock();
 		
-		int min = 0;
+		int min = -1;
 		int minIndex = 0;
 		for (int i = 0; i < model.rCheckouts.length; i++){
 			CheckoutCounter c = model.rCheckouts[i]; 
-			if (c != null && c.status == CheckoutCounter.Status.BUSY || c.status == CheckoutCounter.Status.NOT_BUSY){
-				if (model.rCheckoutQueues[i].size() < min){
+			
+			if (c.status == CheckoutCounter.Status.BUSY || c.status == CheckoutCounter.Status.NOT_BUSY){
+				
+				
+				if (model.rCheckoutQueues[i].size() < min || min == -1){
+					
+					min = model.rCheckoutQueues[i].size();
 					minIndex = i;
 				}
 			}
 		}
+		
 		
 		model.rCheckoutQueues[minIndex].add(icCustomer);
 	}

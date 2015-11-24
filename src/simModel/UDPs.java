@@ -68,6 +68,21 @@ class UDPs
 		return Constants.NONE;
 	}
 	
+	protected void UpdateOutputs (Customer current){
+		int index = 0;
+		for(int i = 0 ; i < Constants.NUM_TIME_SLOTS ; i++){
+			if (model.getClock() < Constants.TIME_SLOTS[i]) {
+				index = i;
+				break;
+			}
+		}
+		
+		if (model.getClock() - current.startWait > 15) model.output.numLongWait[index]++;
+		model.output.numServed[index]++;
+		model.output.propLongWait[index] = model.output.numLongWait[index]/model.output.numServed[index];
+		
+	}
+	
 	protected int ChangeNumOfBaggers (int staffChange){
 		//Determine the difference in number of baggers between the current scheduling slot and 
 		//the previous one. Then just add the difference to rgBaggers.numAvailable.

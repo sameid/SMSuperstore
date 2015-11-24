@@ -15,8 +15,8 @@ class Output
     // Sequences - add them here
 
     // SSOVs
-	int numServed;
-	int numLongWait;
-	int propLongWait;
+	double[] numServed = new double[4];
+	double[] numLongWait = new double[4];
+	double[] propLongWait = new double[4];
 	
 }
