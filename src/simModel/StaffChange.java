@@ -21,7 +21,8 @@ public class StaffChange extends ScheduledAction {
 	// SchedEmp Event
 	protected void actionEvent()
 	{
-		double clock = (int)model.getClock();
+//		double clock = (int)model.getClock();
+		double clock = model.getClock();
 		
 	    if(clock == staffChangeTimeSeq[0])
 	    {

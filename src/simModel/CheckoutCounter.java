@@ -1,10 +1,5 @@
 package simModel;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-
 class CheckoutCounter {
 	
 	protected enum Status {
@@ -19,13 +14,5 @@ class CheckoutCounter {
 	protected boolean baggerPresent = false;
 	
 	protected int scheduleSlot = 0;
-	
-	public void setCustomer (Customer newCustomer){
-		currentCustomer = newCustomer;
-	}
-	
-	public Customer getCustomer (){
-		return currentCustomer;
-	}
 	
 }

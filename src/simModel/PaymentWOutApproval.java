@@ -18,25 +18,26 @@ class PaymentWOutApproval extends ConditionalActivity{
 	
 	@Override
 	protected double duration() {
-		// TODO Auto-generated method stub
 		return model.rvp.uPaymentTm(this.icCustomer.paymentType);
 	}
 
 	@Override
 	public void startingEvent() {
-		// TODO Auto-generated method stub
+		//Get the ID of the CheckoutCounter, where the Customer can pay, since they have been served.
 		this.id = model.udp.CanCustomerPay();
 		this.icCustomer = model.rCheckouts[this.id].currentCustomer;	
 	}
 
 	@Override
 	protected void terminatingEvent() {
-		// TODO Auto-generated method stub
 
+		//Now that the Customer has been served, bagged, and has payed, they can leave, and free up the respective CheckoutCounter
 		model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
 
+		//Update the output parameters
 		model.udp.UpdateOutputs(this.icCustomer);
 		
+		//The Customers can now leave.
 		icCustomer = null;
 		model.rCheckouts[id].currentCustomer = null;
 		

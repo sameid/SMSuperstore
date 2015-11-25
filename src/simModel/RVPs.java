@@ -68,6 +68,7 @@ class RVPs
         if (nxtInterArr > model.closingTime){
         	nxtInterArr = -1.0;
         }
+        
 	    return(nxtInterArr);
 	}
 	

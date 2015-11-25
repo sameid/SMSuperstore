@@ -19,4 +19,6 @@ class Output
 	double[] numLongWait = new double[4];
 	double[] propLongWait = new double[4];
 	
+	double overPropLongWait;
+	
 }
