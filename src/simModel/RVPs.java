@@ -174,7 +174,9 @@ class RVPs
 	
 	protected double uBaggingTm(int numOfItems){
 		double test = (checkoutTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION));
-		return numOfItems * test;
+		double t = numOfItems * test;
+		System.out.println(t);
+		return t;
 	}
 
 	/****************************/

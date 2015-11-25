@@ -24,27 +24,27 @@ class Experiment
        // Loop for NUMRUN simulation runs for each case
        
        // Case 1: Few employees
-       System.out.println(" Case 1");
-       
-       int[] lightCashierSchedule = {4, 1, 3};
-       int[] lightBaggerSchedule = {1, 1, 1};
-       
-       for(i=0 ; i < NUMRUNS ; i++)
-       {
-          mname = new SMSuperstore(startTime,endTime, lightCashierSchedule, lightBaggerSchedule, sds[i], true);
-          mname.runSimulation();
-       }
-       
-//       // Case 1: Lots of employees
-//       System.out.println(" Case 2");
+//       System.out.println(" Case 1");
 //       
-//       int[] heavyCashierSchedule = {15, 5, 15};
-//       int[] heavyBaggerSchedule = {15, 5, 15};
+//       int[] lightCashierSchedule = {4, 1, 3};
+//       int[] lightBaggerSchedule = {1, 1, 1};
 //       
 //       for(i=0 ; i < NUMRUNS ; i++)
 //       {
-//          mname = new SMSuperstore(startTime,endTime,heavyCashierSchedule, heavyBaggerSchedule, sds[i], true);
+//          mname = new SMSuperstore(startTime,endTime, lightCashierSchedule, lightBaggerSchedule, sds[i], true);
 //          mname.runSimulation();
 //       }
+       
+       // Case 1: Lots of employees
+       System.out.println(" Case 2");
+       
+       int[] heavyCashierSchedule = {17, 3, 17};
+       int[] heavyBaggerSchedule = {17, 3, 17};
+       
+       for(i=0 ; i < NUMRUNS ; i++)
+       {
+          mname = new SMSuperstore(startTime,endTime,heavyCashierSchedule, heavyBaggerSchedule, sds[i], true);
+          mname.runSimulation();
+       }
    }
 }

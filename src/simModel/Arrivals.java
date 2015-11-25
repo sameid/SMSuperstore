@@ -23,6 +23,9 @@ public class Arrivals extends ScheduledAction{
 		icCustomer.numberOfItems = model.rvp.uNumItem();
 		icCustomer.paymentType = model.rvp.uPaymentType(icCustomer.numberOfItems);
 		icCustomer.startWait = model.getClock();
+		icCustomer.served = false;
+		icCustomer.bagged = false;
+		icCustomer.payed = false;
 		
 		
 		//Find the CheckoutQueue with the least number of customers in it, that is serving. 

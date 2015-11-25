@@ -16,7 +16,8 @@ class Customer {
 	double startWait;
 	double paymentTime;
 
-	boolean served;
-	boolean bagged;
+	protected boolean served = false;
+	protected boolean bagged = false;
+	protected boolean payed = false;
 	
 }

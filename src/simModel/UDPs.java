@@ -45,7 +45,9 @@ class UDPs
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& !c.currentCustomer.bagged
-					&& model.rgBaggers.numAvailable == 0){
+					&& model.rgBaggers.numAvailable == 0
+					&& !c.cashierIsBagging){
+				
 				return i;
 			}
 		}
@@ -59,8 +61,10 @@ class UDPs
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& c.currentCustomer.bagged
+					&& !c.currentCustomer.payed
 					&& c.status == CheckoutCounter.Status.BUSY
-					&& c.currentCustomer.paymentType != Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
+					&& c.currentCustomer.paymentType != Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD
+					&& !c.customerIsPaying){
 				return i;
 			}
 		}
@@ -144,12 +148,12 @@ class UDPs
 		for (int j=0; j<numToAdd; j++){
 			int checkoutToAddTo = -1;
 			//find the first unattended checkout
-			for (int i=0; i<20; i++){
+			for (int i=0; i<model.rCheckouts.length; i++){
 				if (model.rCheckouts[i].status == Status.UNATTENDED){
 					checkoutToAddTo = i;
 				}
 			}
-			if (checkoutToAddTo >= 0 && checkoutToAddTo < 20){
+			if (checkoutToAddTo >= 0 && checkoutToAddTo < model.rCheckouts.length){
 				model.rCheckouts[checkoutToAddTo].status = Status.NOT_BUSY;
 				model.rCheckouts[checkoutToAddTo].scheduleSlot = staffChange;
 			}
@@ -169,12 +173,12 @@ class UDPs
 		for (int j=0; j<numToRemove; j++){
 			int checkoutToRemoveFrom = -1;
 			//find a checkout with an appropriate cashier to remove
-			for (int i=0; i<20; i++){
+			for (int i=0; i<model.rCheckouts.length; i++){
 				if (model.rCheckouts[i].scheduleSlot == staffChange-2){
 					checkoutToRemoveFrom = i;
 				}
 			}
-			if (checkoutToRemoveFrom >= 0 && checkoutToRemoveFrom < 20){
+			if (checkoutToRemoveFrom >= 0 && checkoutToRemoveFrom < model.rCheckouts.length){
 				model.rCheckouts[checkoutToRemoveFrom].status = Status.CLOSING;
 				model.rCheckouts[checkoutToRemoveFrom].scheduleSlot = 0;
 			}
@@ -189,7 +193,7 @@ class UDPs
 	//will simply change places (checkout counters) with newly arrived cashiers
 	//this is done by changing the scheduleSlot attribute from 1 to 3 for applicable checkout counters. 
 	private void swapCashiers (){
-		for (int i=0; i<20; i++){
+		for (int i=0; i<model.rCheckouts.length; i++){
 			if (model.rCheckouts[i].scheduleSlot == 1){
 				model.rCheckouts[i].scheduleSlot = 3;
 			}

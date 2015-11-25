@@ -86,38 +86,40 @@ public class SMSuperstore extends AOSimulationModel
 	{
 		reschedule (behObj);
 		while(scanPreconditions()) {}
+		System.out.println("-----------------------------------------------------------------------------");
 		// Check preconditions of Interruptions in Extended Activities
 	}
 	
 	protected boolean scanPreconditions (){
 		boolean state = false;
 		// Check preconditions of Conditional Activities
+		
 		if (Checkout.precondition(this)){
 			Checkout act = new Checkout(this);
 			act.startingEvent();
 			scheduleActivity(act);
-//			state = true;
+			state = true;
 		}
 		
 		if (BaggingByCashier.precondition(this)){
 			BaggingByCashier act = new BaggingByCashier(this);
 			act.startingEvent();
 			scheduleActivity(act);
-//			state = true;
+			state = true;
 		}
 		
 		if (PaymentWApproval.precondition(this)){
 			PaymentWApproval act = new PaymentWApproval(this);
 			act.startingEvent();
 			scheduleActivity(act);
-//			state = true;
+			state = true;
 		}
 		
 		if (PaymentWOutApproval.precondition(this)){
 			PaymentWOutApproval act = new PaymentWOutApproval(this);
 			act.startingEvent();
 			scheduleActivity(act);
-//			state = true;
+			state = true;
 		}
 		
 		return state;

@@ -45,7 +45,7 @@ class Checkout extends ConditionalActivity{
 	protected void terminatingEvent() {
 		//On terminating the Checkout activity, the Customer has now served
 		icCustomer.served = true;
-		
+
 		//If there was a bagger present at this instance of the activity, the bagger is now made available again
 		if (model.rCheckouts[id].baggerPresent){
 			model.rgBaggers.numAvailable++;
