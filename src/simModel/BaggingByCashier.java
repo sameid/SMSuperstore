@@ -28,21 +28,18 @@ class BaggingByCashier extends ConditionalActivity{
 	public void startingEvent() {
 		//The followiing will get the id of the CheckoutCounter that requires it's Employee to bag customer items 
 		this.id = model.udp.ShouldCashierBag();
-		icCustomer = model.rCheckouts[this.id].currentCustomer;
-		model.rCheckouts[this.id].cashierIsBagging = true;
 		//Set the CheckoutCounter back to BUSY
 		model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
+		icCustomer = model.rCheckouts[this.id].currentCustomer;
+		model.rCheckouts[this.id].cashierIsBagging = true;
 
-		System.out.println("BaggingByCashier Started");
 	}
 
 	@Override
 	protected void terminatingEvent() {
 		//Now the customer has been bagged so set that flag to TRUE
 		icCustomer.bagged = true;
-		model.rCheckouts[id].currentCustomer.bagged = true;
 		model.rCheckouts[this.id].cashierIsBagging = false;
-		System.out.println("BaggingByCashier Terminated");
 		//If the Customer's has to pay with a check, but they forgot their cashing card, they will be sent to
 		//Supervisor so that their Payment can be approved.
 		if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){

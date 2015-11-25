@@ -27,7 +27,6 @@ public class Arrivals extends ScheduledAction{
 		icCustomer.bagged = false;
 		icCustomer.payed = false;
 		
-		
 		//Find the CheckoutQueue with the least number of customers in it, that is serving. 
 		int min = -1;
 		int minIndex = 0;
