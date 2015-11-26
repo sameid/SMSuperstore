@@ -44,7 +44,7 @@ class Checkout extends ConditionalActivity{
 	@Override
 	protected void terminatingEvent() {
 		//On terminating the Checkout activity, the Customer has now served
-		icCustomer.served = true;
+		icCustomer.isServed = true;
 
 		//If there was a bagger present at this instance of the activity, the bagger is now made available again
 		if (model.rCheckouts[id].baggerPresent){
@@ -52,7 +52,7 @@ class Checkout extends ConditionalActivity{
 			model.rCheckouts[id].baggerPresent = false;
 	
 			//Since there was a bagger present at the CheckoutCounter, they Customer has also been bagged.
-			icCustomer.bagged = true;
+			icCustomer.isBagged = true;
 			
 			//If the Customer is trying to pay with a Check, but does not have their check cashing card, they will need
 			//Supervisor approval, and so the Customer will be sent to the SupervisorQueue.

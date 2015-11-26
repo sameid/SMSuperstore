@@ -38,7 +38,7 @@ class BaggingByCashier extends ConditionalActivity{
 	@Override
 	protected void terminatingEvent() {
 		//Now the customer has been bagged so set that flag to TRUE
-		icCustomer.bagged = true;
+		icCustomer.isBagged = true;
 		model.rCheckouts[this.id].isBagging = false;
 		//If the Customer's has to pay with a check, but they forgot their cashing card, they will be sent to
 		//Supervisor so that their Payment can be approved.

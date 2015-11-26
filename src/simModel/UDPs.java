@@ -43,8 +43,8 @@ class UDPs
 		for (int i = 0; i < model.rCheckouts.length ; i++){
 			CheckoutCounter c = model.rCheckouts[i];
 			if (c.currentCustomer != null 
-					&& c.currentCustomer.served 
-					&& !c.currentCustomer.bagged
+					&& c.currentCustomer.isServed 
+					&& !c.currentCustomer.isBagged
 					&& !c.isBagging){
 				
 				return i;
@@ -58,9 +58,9 @@ class UDPs
 		for (int i = 0; i < model.rCheckouts.length ; i++){
 			CheckoutCounter c = model.rCheckouts[i];
 			if (c.currentCustomer != null 
-					&& c.currentCustomer.served 
-					&& c.currentCustomer.bagged
-					&& !c.currentCustomer.payed
+					&& c.currentCustomer.isServed 
+					&& c.currentCustomer.isBagged
+					&& !c.currentCustomer.isPayed
 					&& c.status == CheckoutCounter.Status.BUSY
 					&& c.currentCustomer.paymentType != Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD
 					&& !c.isPaying){
