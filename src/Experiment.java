@@ -35,7 +35,7 @@ class Experiment
 //          mname.runSimulation();
 //       }
        
-       // Case 1: Lots of employees
+       // Case 2: Lots of employees
        System.out.println(" Case 2");
        
        int[] heavyCashierSchedule = {17, 3, 17};

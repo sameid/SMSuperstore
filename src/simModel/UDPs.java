@@ -45,7 +45,6 @@ class UDPs
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& !c.currentCustomer.bagged
-					&& model.rgBaggers.numAvailable == 0
 					&& !c.cashierIsBagging){
 				
 				return i;
@@ -85,6 +84,13 @@ class UDPs
 		model.output.numServed[index]++;
 		model.output.propLongWait[index] = model.output.numLongWait[index]/model.output.numServed[index];
 		
+		double overallNumLongWait = 0;
+		double overallNumServed = 0;
+		for(int i=0; i < model.output.numLongWait.length; i++ ){
+			overallNumLongWait += model.output.numLongWait[i];
+			overallNumServed += model.output.numServed[i];
+		}
+		model.output.overallPropLongWait = overallNumLongWait/overallNumServed;
 	}
 	
 	protected int ChangeNumOfBaggers (int staffChange){
@@ -151,6 +157,7 @@ class UDPs
 			for (int i=0; i<model.rCheckouts.length; i++){
 				if (model.rCheckouts[i].status == Status.UNATTENDED){
 					checkoutToAddTo = i;
+					break;
 				}
 			}
 			if (checkoutToAddTo >= 0 && checkoutToAddTo < model.rCheckouts.length){
@@ -176,10 +183,11 @@ class UDPs
 			for (int i=0; i<model.rCheckouts.length; i++){
 				if (model.rCheckouts[i].scheduleSlot == staffChange-2){
 					checkoutToRemoveFrom = i;
+					break;
 				}
 			}
 			if (checkoutToRemoveFrom >= 0 && checkoutToRemoveFrom < model.rCheckouts.length){
-				model.rCheckouts[checkoutToRemoveFrom].status = Status.CLOSING;
+				model.rCheckouts[checkoutToRemoveFrom].isClosing = true;
 				model.rCheckouts[checkoutToRemoveFrom].scheduleSlot = 0;
 			}
 			else{

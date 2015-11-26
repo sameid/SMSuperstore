@@ -60,7 +60,13 @@ class Checkout extends ConditionalActivity{
 				model.rSupervisorQueue.add(icCustomer);
 				
 				//The current CheckoutCounter is no longer interested with the current customer, and can continue serving
-				model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+				//or if they are closing and their queue is empty, the cashier will leave
+				if(model.rCheckouts[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+					model.rCheckouts[id].status = CheckoutCounter.Status.UNATTENDED;
+				} 
+				else{
+					model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+				}				
 				model.rCheckouts[id].currentCustomer = null;
 			}
 		}

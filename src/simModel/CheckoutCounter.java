@@ -5,8 +5,7 @@ class CheckoutCounter {
 	protected enum Status {
 		BUSY,
 		NOT_BUSY,
-		UNATTENDED,
-		CLOSING
+		UNATTENDED
 	}
 	protected Status status;
 	
@@ -14,7 +13,7 @@ class CheckoutCounter {
 	protected boolean baggerPresent = false;
 	protected boolean cashierIsBagging = false;
 	protected boolean customerIsPaying = false;
-	
+	protected boolean isClosing = false;
 	protected int scheduleSlot = 0;
 	
 }

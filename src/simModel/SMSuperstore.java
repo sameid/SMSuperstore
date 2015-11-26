@@ -86,7 +86,6 @@ public class SMSuperstore extends AOSimulationModel
 	{
 		reschedule (behObj);
 		while(scanPreconditions()) {}
-		System.out.println("-----------------------------------------------------------------------------");
 		// Check preconditions of Interruptions in Extended Activities
 	}
 	
@@ -137,10 +136,41 @@ public class SMSuperstore extends AOSimulationModel
 	boolean traceFlag = true;
 	protected void eventOccured()
 	{
+		Customer cust = null;
+		if (getClock() > 479){
+			
+			cust = rCheckouts[18].currentCustomer;
+			
+			
+		}
+//		traceFlag = false;
 		if(traceFlag)
 		{
-			// Can add other trace/log code to monitor the status of the system
-			System.out.println("Timestamp: " + getClock() + " PropLongWait: " + output.propLongWait[1]);
+			Enum[] cashierStatusArray = new Enum[20];
+			Boolean[] baggerStatusArray = new Boolean[20];
+			int[] queueLengthArray = new int[20];
+			Boolean[] isClosingArray = new Boolean[20];
+			for(int i=0; i<rCheckouts.length; i++){
+				cashierStatusArray[i] = rCheckouts[i].status;
+				baggerStatusArray[i] = rCheckouts[i].baggerPresent;
+				queueLengthArray[i] = rCheckoutQueues[i].size();
+				isClosingArray[i] = rCheckouts[i].isClosing;
+			}
+
+			System.out.println("Timestamp: " + getClock() + ",  Baggers Available: " + rgBaggers.numAvailable + ",  Supervisor Queue: " + rSupervisorQueue.size()  + ",  overallPropLongWait: " + output.overallPropLongWait);
+			System.out.print("     Queue Length:        ");
+			for (int i=0; i<20; i++) System.out.printf(" %-4d", queueLengthArray[i]);
+			System.out.println("");
+			System.out.print("     Checkout Status:     ");
+			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", cashierStatusArray[i]);
+			System.out.println("");
+			System.out.print("     Checkout Has Bagger: ");
+			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", baggerStatusArray[i]);
+			System.out.println("");
+			System.out.print("     Checkout is closing: ");
+			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", isClosingArray[i]);
+			System.out.println("");
+			System.out.println("");
 //			this.showSBL();
 //		     PriorityQueue<SBNotice> sbl = this.getCopySBL();
 //			 explicitShowSBL(sbl);

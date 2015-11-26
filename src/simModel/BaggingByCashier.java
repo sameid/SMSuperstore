@@ -29,7 +29,7 @@ class BaggingByCashier extends ConditionalActivity{
 		//The followiing will get the id of the CheckoutCounter that requires it's Employee to bag customer items 
 		this.id = model.udp.ShouldCashierBag();
 		//Set the CheckoutCounter back to BUSY
-		model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
+		//model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
 		icCustomer = model.rCheckouts[this.id].currentCustomer;
 		model.rCheckouts[this.id].cashierIsBagging = true;
 
@@ -44,7 +44,15 @@ class BaggingByCashier extends ConditionalActivity{
 		//Supervisor so that their Payment can be approved.
 		if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
 			model.rSupervisorQueue.add(icCustomer);
-			model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+			
+			//Now that the Customer has been served, bagged, and has payed, they can leave, and free up the respective CheckoutCounter
+			//or if the checkout is closing and the queue is empty, the cashier will leave
+			if(model.rCheckouts[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+				model.rCheckouts[id].status = CheckoutCounter.Status.UNATTENDED;
+			} 
+			else{
+				model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+			}
 		}
 		
 	}

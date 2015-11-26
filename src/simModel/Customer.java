@@ -14,7 +14,7 @@ class Customer {
 	PaymentType paymentType;
 
 	double startWait;
-	double paymentTime;
+	//double paymentTime;
 
 	protected boolean served = false;
 	protected boolean bagged = false;

@@ -33,7 +33,7 @@ public class Arrivals extends ScheduledAction{
 		for (int i = 0; i < model.rCheckouts.length; i++){
 			CheckoutCounter c = model.rCheckouts[i]; 
 			//This if condition will ensure that the Checkout has an employee that is currently serving customers.
-			if (c.status == CheckoutCounter.Status.BUSY || c.status == CheckoutCounter.Status.NOT_BUSY){
+			if (c.status != CheckoutCounter.Status.UNATTENDED && !c.isClosing){
 				if (model.rCheckoutQueues[i].size() < min || min == -1){
 					min = model.rCheckoutQueues[i].size();
 					minIndex = i;

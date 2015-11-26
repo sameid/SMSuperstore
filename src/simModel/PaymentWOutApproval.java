@@ -33,7 +33,13 @@ class PaymentWOutApproval extends ConditionalActivity{
 	protected void terminatingEvent() {
 
 		//Now that the Customer has been served, bagged, and has payed, they can leave, and free up the respective CheckoutCounter
-		model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+		//or if the checkout is closing and the queue is empty, the cashier will leave
+		if(model.rCheckouts[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+			model.rCheckouts[id].status = CheckoutCounter.Status.UNATTENDED;
+		} 
+		else{
+			model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+		}
 		model.rCheckouts[id].currentCustomer.payed = true;
 		model.rCheckouts[this.id].customerIsPaying = false;
 		//Update the output parameters
