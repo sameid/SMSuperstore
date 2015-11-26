@@ -29,6 +29,8 @@ class Initialise extends ScheduledAction
 			model.rCheckoutQueues[i] = new LinkedList<Customer>();
 		}
 		
+		model.rSupervisor.status = Supervisor.Status.NOT_BUSY;
+		
 		for (int i = 0 ; i < Constants.NUM_TIME_SLOTS ; i++){
 			model.output.numLongWait[i] = 0.0;
 			model.output.numServed[i] = 0.0;

@@ -29,7 +29,7 @@ class BaggingByCashier extends ConditionalActivity{
 		//The followiing will get the id of the CheckoutCounter that requires it's Employee to bag customer items 
 		this.id = model.udp.ShouldCashierBag();
 		//Set the CheckoutCounter back to BUSY
-		//model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
+		model.rCheckouts[this.id].status = CheckoutCounter.Status.BUSY;
 		icCustomer = model.rCheckouts[this.id].currentCustomer;
 		model.rCheckouts[this.id].cashierIsBagging = true;
 
