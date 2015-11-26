@@ -45,7 +45,7 @@ class UDPs
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.served 
 					&& !c.currentCustomer.bagged
-					&& !c.cashierIsBagging){
+					&& !c.isBagging){
 				
 				return i;
 			}
@@ -63,7 +63,7 @@ class UDPs
 					&& !c.currentCustomer.payed
 					&& c.status == CheckoutCounter.Status.BUSY
 					&& c.currentCustomer.paymentType != Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD
-					&& !c.customerIsPaying){
+					&& !c.isPaying){
 				return i;
 			}
 		}

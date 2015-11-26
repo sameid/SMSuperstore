@@ -11,8 +11,8 @@ class CheckoutCounter {
 	
 	protected Customer currentCustomer;
 	protected boolean baggerPresent = false;
-	protected boolean cashierIsBagging = false;
-	protected boolean customerIsPaying = false;
+	protected boolean isBagging = false;
+	protected boolean isPaying = false;
 	protected boolean isClosing = false;
 	protected int scheduleSlot = 0;
 	

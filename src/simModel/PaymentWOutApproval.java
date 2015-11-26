@@ -26,7 +26,7 @@ class PaymentWOutApproval extends ConditionalActivity{
 		//Get the ID of the CheckoutCounter, where the Customer can pay, since they have been served.
 		this.id = model.udp.CanCustomerPay();
 		this.icCustomer = model.rCheckouts[this.id].currentCustomer;	
-		model.rCheckouts[this.id].customerIsPaying = true;
+		model.rCheckouts[this.id].isPaying = true;
 	}
 
 	@Override
@@ -41,7 +41,7 @@ class PaymentWOutApproval extends ConditionalActivity{
 			model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
 		}
 		model.rCheckouts[id].currentCustomer.payed = true;
-		model.rCheckouts[id].customerIsPaying = false;
+		model.rCheckouts[id].isPaying = false;
 		//Update the output parameters
 		model.udp.UpdateOutputs(this.icCustomer);
 		
