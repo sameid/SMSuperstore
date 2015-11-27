@@ -136,14 +136,6 @@ public class SMSuperstore extends AOSimulationModel
 	boolean traceFlag = true;
 	protected void eventOccured()
 	{
-		Customer cust = null;
-		if (getClock() > 479){
-			
-			cust = rCheckouts[18].currentCustomer;
-			
-			
-		}
-//		traceFlag = false;
 		if(traceFlag)
 		{
 			Enum[] cashierStatusArray = new Enum[20];
@@ -158,7 +150,7 @@ public class SMSuperstore extends AOSimulationModel
 			}
 			
 			System.out.println("");
-			System.out.println("Timestamp: " + getClock() + ",  Baggers Available: " + rgBaggers.numAvailable + ",  Supervisor Queue: " + rSupervisorQueue.size()  + ",  overallPropLongWait: " + output.overallPropLongWait);
+			System.out.println("Timestamp: " + getClock() + ",  Baggers Available: " + rgBaggers.numAvailable + ",  Supervisor Status: " + rSupervisor.status  + ",  overallPropLongWait: " + output.overallPropLongWait);
 			System.out.print("     Queue Length:        ");
 			for (int i=0; i<20; i++) System.out.printf(" %-4d", queueLengthArray[i]);
 			System.out.println("");
@@ -172,14 +164,11 @@ public class SMSuperstore extends AOSimulationModel
 			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", isClosingArray[i]);
 			System.out.println("");
 //			this.showSBL();
-//		    PriorityQueue<SBNotice> sbl = this.getCopySBL();
+		    PriorityQueue<SBNotice> sbl = this.getCopySBL();
 			explicitShowSBL(sbl);
 
 		}
 
-		// Setup an updateTrjSequences() method in the Output class
-		// and call here if you have Trajectory Sets
-		// updateTrjSequences() 
 	}
 
 	// The following method duplicates the function of the private
