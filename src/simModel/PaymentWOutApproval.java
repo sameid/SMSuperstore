@@ -42,8 +42,6 @@ class PaymentWOutApproval extends ConditionalActivity{
 		}
 		model.rCheckouts[id].currentCustomer.isPayed = true;
 		model.rCheckouts[id].isPaying = false;
-		//Update the output parameters
-		model.udp.UpdateOutputs(this.icCustomer);
 		
 		//The Customers can now leave.
 		icCustomer = null;

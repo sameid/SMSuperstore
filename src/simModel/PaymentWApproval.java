@@ -32,8 +32,7 @@ class PaymentWApproval extends ConditionalActivity{
 	protected void terminatingEvent() {
 		//Supervisor is no longer BUSY and can service another Customer
 		model.rSupervisor.status = Supervisor.Status.NOT_BUSY;
-		//Update the output parameters
-		model.udp.UpdateOutputs(this.icCustomer);
+
 		//The Customer has now left the store
 		icCustomer = null;
 		model.rSupervisor.currentCustomer = null;

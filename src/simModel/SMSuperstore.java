@@ -156,7 +156,8 @@ public class SMSuperstore extends AOSimulationModel
 				queueLengthArray[i] = rCheckoutQueues[i].size();
 				isClosingArray[i] = rCheckouts[i].isClosing;
 			}
-
+			
+			System.out.println("");
 			System.out.println("Timestamp: " + getClock() + ",  Baggers Available: " + rgBaggers.numAvailable + ",  Supervisor Queue: " + rSupervisorQueue.size()  + ",  overallPropLongWait: " + output.overallPropLongWait);
 			System.out.print("     Queue Length:        ");
 			for (int i=0; i<20; i++) System.out.printf(" %-4d", queueLengthArray[i]);
@@ -167,13 +168,12 @@ public class SMSuperstore extends AOSimulationModel
 			System.out.print("     Checkout Has Bagger: ");
 			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", baggerStatusArray[i]);
 			System.out.println("");
-			System.out.print("     Checkout is closing: ");
+			System.out.print("     Checkout Is Closing: ");
 			for (int i=0; i<20; i++) System.out.printf(" %-4.4s", isClosingArray[i]);
 			System.out.println("");
-			System.out.println("");
 //			this.showSBL();
-//		     PriorityQueue<SBNotice> sbl = this.getCopySBL();
-//			 explicitShowSBL(sbl);
+//		    PriorityQueue<SBNotice> sbl = this.getCopySBL();
+			explicitShowSBL(sbl);
 
 		}
 

@@ -31,6 +31,8 @@ class Checkout extends ConditionalActivity{
 		this.icCustomer = model.rCheckoutQueues[id].remove();
 		//The Customer that we removed from the Queue is now the currentCustomer of the CheckoutCounter
 		model.rCheckouts[id].currentCustomer = this.icCustomer;
+		//Update the output parameters based on the fact that the customer is now done waiting
+		model.udp.UpdateOutputs(this.icCustomer);
 		//The Employee at the CheckoutCounter is now BUSY
 		model.rCheckouts[id].status = CheckoutCounter.Status.BUSY;
 		

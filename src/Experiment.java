@@ -1,17 +1,29 @@
-// File: Experiment.java
-// Description:
+//Additional experiment
+//Not used at the moment
 
 import simModel.*;
+import cern.colt.Arrays;
 import cern.jet.random.engine.*;
 
-// Main Method: Experiments
-//
-//Validation Experiment
 class Experiment
 {
    public static void main(String[] args)
    {
-       int i, NUMRUNS = 1; 
+	   int[][] cashierSchedules =
+		   {
+				   {10,5,9},   //case 1
+				   {},  //case 2
+				   {}  //case 3
+		   };
+	   
+	   int[][] baggerSchedules =
+		   {
+				   {8,5,8},   //case 1
+				   {},  //case 2
+				   {}  //case 3
+		   };
+	   
+       int i, NUMRUNS = 30;
        double startTime=0.0, endTime=480.0;
        Seeds[] sds = new Seeds[NUMRUNS];
        SMSuperstore mname;  // Simulation object
@@ -23,27 +35,13 @@ class Experiment
   
        // Loop for NUMRUN simulation runs for each case
        
-       // Case 1: Few employees
-//       System.out.println(" Case 1");
-//       
-//       int[] lightCashierSchedule = {4, 1, 3};
-//       int[] lightBaggerSchedule = {1, 1, 1};
-//       
-//       for(i=0 ; i < NUMRUNS ; i++)
-//       {
-//          mname = new SMSuperstore(startTime,endTime, lightCashierSchedule, lightBaggerSchedule, sds[i], true);
-//          mname.runSimulation();
-//       }
-       
-       // Case 2: Lots of employees
-       System.out.println(" Case 2");
-       
-       int[] heavyCashierSchedule = {17, 3, 17};
-       int[] heavyBaggerSchedule = {17, 3, 17};
-       
+       // Case 1
+       System.out.println(" Case 1");
+       System.out.println("Cashier Schedule: " + Arrays.toString(cashierSchedules[0]));
+       System.out.println("Bagger Schedule: " + Arrays.toString(baggerSchedules[0]));
        for(i=0 ; i < NUMRUNS ; i++)
        {
-          mname = new SMSuperstore(startTime,endTime,heavyCashierSchedule, heavyBaggerSchedule, sds[i], true);
+          mname = new SMSuperstore(startTime,endTime, cashierSchedules[0], baggerSchedules[0], sds[i], true);
           mname.runSimulation();
        }
    }
