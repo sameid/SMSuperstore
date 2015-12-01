@@ -136,13 +136,15 @@ class RVPs
 	
 	protected double uCheckoutTm(int numOfItems){
 		
+		double regularTime = 0.0;
 		double addedTime = 0.0;
 		for (int i = 0 ; i < numOfItems ; i++){
 			double randNum = pricecheckRandGen.nextDouble(); 
 			if (randNum <= PROP_PRICE_CHECK) addedTime += priceCheckDist.nextDouble(1.0/PRICE_CHECK_MEAN);
+			regularTime += checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION);
 		}
 		
-		return (numOfItems * (checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION))) + addedTime;
+		return regularTime + addedTime;
 	}
 
 	/****************************/
