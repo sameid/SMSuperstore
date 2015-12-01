@@ -8,8 +8,5 @@ class Supervisor {
 	}
 	
 	Status status;
-	Customer currentCustomer;
-	
-	
 	
 }

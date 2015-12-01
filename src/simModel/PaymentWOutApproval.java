@@ -25,8 +25,8 @@ class PaymentWOutApproval extends ConditionalActivity{
 	public void startingEvent() {
 		//Get the ID of the CheckoutCounter, where the Customer can pay, since they have been served.
 		this.id = model.udp.CanCustomerPay();
-		this.icCustomer = model.rCheckouts[this.id].currentCustomer;	
-		model.rCheckouts[this.id].isPaying = true;
+		this.icCustomer = model.rCheckoutCounters[this.id].currentCustomer;	
+		model.rCheckoutCounters[this.id].isPaying = true;
 	}
 
 	@Override
@@ -34,18 +34,18 @@ class PaymentWOutApproval extends ConditionalActivity{
 
 		//Now that the Customer has been served, bagged, and has payed, they can leave, and free up the respective CheckoutCounter
 		//or if the checkout is closing and the queue is empty, the cashier will leave
-		if(model.rCheckouts[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
-			model.rCheckouts[id].status = CheckoutCounter.Status.UNATTENDED;
+		if(model.rCheckoutCounters[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+			model.rCheckoutCounters[id].status = CheckoutCounter.Status.UNATTENDED;
 		} 
 		else{
-			model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+			model.rCheckoutCounters[id].status = CheckoutCounter.Status.NOT_BUSY;
 		}
-		model.rCheckouts[id].currentCustomer.isPayed = true;
-		model.rCheckouts[id].isPaying = false;
+		model.rCheckoutCounters[id].currentCustomer.isPayed = true;
+		model.rCheckoutCounters[id].isPaying = false;
 		
 		//The Customers can now leave.
 		icCustomer = null;
-		model.rCheckouts[id].currentCustomer = null;
+		model.rCheckoutCounters[id].currentCustomer = null;
 		
 	}
 

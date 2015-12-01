@@ -35,7 +35,6 @@ class PaymentWApproval extends ConditionalActivity{
 
 		//The Customer has now left the store
 		icCustomer = null;
-		model.rSupervisor.currentCustomer = null;
 		
 	}
 

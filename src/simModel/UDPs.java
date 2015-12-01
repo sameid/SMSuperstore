@@ -27,10 +27,12 @@ class UDPs
         }
 	------------------------------------------------------------*/
 	
+	protected final static double[] TIME_SLOTS = {90.0, 240.0, 390.0, 480.0}; 
+	
 	protected int CanCheckoutServe (){
 		
-		for (int i = 0 ; i < model.rCheckouts.length ; i++){
-			if (model.rCheckouts[i].status == CheckoutCounter.Status.NOT_BUSY && !model.rCheckoutQueues[i].isEmpty()){
+		for (int i = 0 ; i < model.rCheckoutCounters.length ; i++){
+			if (model.rCheckoutCounters[i].status == CheckoutCounter.Status.NOT_BUSY && !model.rCheckoutQueues[i].isEmpty()){
 				return i;
 			}
 		}
@@ -40,8 +42,8 @@ class UDPs
 	
 	protected int ShouldCashierBag (){
 		
-		for (int i = 0; i < model.rCheckouts.length ; i++){
-			CheckoutCounter c = model.rCheckouts[i];
+		for (int i = 0; i < model.rCheckoutCounters.length ; i++){
+			CheckoutCounter c = model.rCheckoutCounters[i];
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.isServed 
 					&& !c.currentCustomer.isBagged
@@ -55,8 +57,8 @@ class UDPs
 	}
 	
 	protected int CanCustomerPay (){
-		for (int i = 0; i < model.rCheckouts.length ; i++){
-			CheckoutCounter c = model.rCheckouts[i];
+		for (int i = 0; i < model.rCheckoutCounters.length ; i++){
+			CheckoutCounter c = model.rCheckoutCounters[i];
 			if (c.currentCustomer != null 
 					&& c.currentCustomer.isServed 
 					&& c.currentCustomer.isBagged
@@ -74,7 +76,7 @@ class UDPs
 	protected void UpdateOutputs (Customer current){
 		int index = 0;
 		for(int i = 0 ; i < Constants.NUM_TIME_SLOTS ; i++){
-			if (model.getClock() < Constants.TIME_SLOTS[i]) {
+			if (model.getClock() < TIME_SLOTS[i]) {
 				index = i;
 				break;
 			}
@@ -91,6 +93,31 @@ class UDPs
 			overallNumServed += model.output.numServed[i];
 		}
 		model.output.overallPropLongWait = overallNumLongWait/overallNumServed;
+	}
+	
+	protected int GetShortestQueue (){
+		//Find the CheckoutQueue with the least number of customers in it, that is serving. 
+		int min = -1;
+		int checkoutSelected = 0;
+		for (int i = 0; i < model.rCheckoutCounters.length; i++){
+			CheckoutCounter c = model.rCheckoutCounters[i]; 
+			
+			//If the customer finds a checkout with an idle cashier, it is the appropriate choice
+			//A queue can be empty but the cashier busy, so selecting a not busy cashier instead is preferable
+			if (c.status == CheckoutCounter.Status.NOT_BUSY && model.rCheckoutQueues[i].isEmpty()){
+				checkoutSelected = i;
+				break;
+			}
+			//This if condition will ensure that the Checkout has an employee that is currently serving customers.
+			if (c.status != CheckoutCounter.Status.UNATTENDED && !c.isClosing){
+				if (model.rCheckoutQueues[i].size() < min || min == -1){
+					min = model.rCheckoutQueues[i].size();
+					checkoutSelected = i;
+				}
+			}
+		}
+		
+		return checkoutSelected;
 	}
 	
 	protected int ChangeNumOfBaggers (int staffChange){
@@ -154,15 +181,15 @@ class UDPs
 		for (int j=0; j<numToAdd; j++){
 			int checkoutToAddTo = -1;
 			//find the first unattended checkout
-			for (int i=0; i<model.rCheckouts.length; i++){
-				if (model.rCheckouts[i].status == Status.UNATTENDED){
+			for (int i=0; i<model.rCheckoutCounters.length; i++){
+				if (model.rCheckoutCounters[i].status == Status.UNATTENDED){
 					checkoutToAddTo = i;
 					break;
 				}
 			}
-			if (checkoutToAddTo >= 0 && checkoutToAddTo < model.rCheckouts.length){
-				model.rCheckouts[checkoutToAddTo].status = Status.NOT_BUSY;
-				model.rCheckouts[checkoutToAddTo].scheduleSlot = staffChange;
+			if (checkoutToAddTo >= 0 && checkoutToAddTo < model.rCheckoutCounters.length){
+				model.rCheckoutCounters[checkoutToAddTo].status = Status.NOT_BUSY;
+				model.rCheckoutCounters[checkoutToAddTo].scheduleSlot = staffChange;
 			}
 			else{
 				System.out.println("error: Attempted to add cashier but all checkouts attended");
@@ -180,15 +207,15 @@ class UDPs
 		for (int j=0; j<numToRemove; j++){
 			int checkoutToRemoveFrom = -1;
 			//find a checkout with an appropriate cashier to remove
-			for (int i=0; i<model.rCheckouts.length; i++){
-				if (model.rCheckouts[i].scheduleSlot == staffChange-2){
+			for (int i=0; i<model.rCheckoutCounters.length; i++){
+				if (model.rCheckoutCounters[i].scheduleSlot == staffChange-2){
 					checkoutToRemoveFrom = i;
 					break;
 				}
 			}
-			if (checkoutToRemoveFrom >= 0 && checkoutToRemoveFrom < model.rCheckouts.length){
-				model.rCheckouts[checkoutToRemoveFrom].isClosing = true;
-				model.rCheckouts[checkoutToRemoveFrom].scheduleSlot = 0;
+			if (checkoutToRemoveFrom >= 0 && checkoutToRemoveFrom < model.rCheckoutCounters.length){
+				model.rCheckoutCounters[checkoutToRemoveFrom].isClosing = true;
+				model.rCheckoutCounters[checkoutToRemoveFrom].scheduleSlot = 0;
 			}
 			else{
 				System.out.println("error: Attempted to remove cashier but none found");
@@ -201,9 +228,9 @@ class UDPs
 	//will simply change places (checkout counters) with newly arrived cashiers
 	//this is done by changing the scheduleSlot attribute from 1 to 3 for applicable checkout counters. 
 	private void swapCashiers (){
-		for (int i=0; i<model.rCheckouts.length; i++){
-			if (model.rCheckouts[i].scheduleSlot == 1){
-				model.rCheckouts[i].scheduleSlot = 3;
+		for (int i=0; i<model.rCheckoutCounters.length; i++){
+			if (model.rCheckoutCounters[i].scheduleSlot == 1){
+				model.rCheckoutCounters[i].scheduleSlot = 3;
 			}
 		}
 	}	

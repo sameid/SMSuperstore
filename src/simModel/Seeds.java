@@ -6,7 +6,7 @@ public class Seeds
 {
 	
 	
-	int[] seeds = new int[8];
+	int[] seeds = new int[9];
 	int index = 0;
 
 	public Seeds(RandomSeedGenerator rsg)

@@ -23,7 +23,7 @@ class Experiment
 				   {}  //case 3
 		   };
 	   
-       int i, NUMRUNS = 30;
+       int i, NUMRUNS = 1;
        double startTime=0.0, endTime=480.0;
        Seeds[] sds = new Seeds[NUMRUNS];
        SMSuperstore mname;  // Simulation object

@@ -18,8 +18,7 @@ class Checkout extends ConditionalActivity{
 	
 	@Override
 	protected double duration() {
-		int numOfItems = icCustomer.numberOfItems;
-		return model.rvp.uCheckoutTm(numOfItems);
+		return model.rvp.uCheckoutTm(icCustomer.numberOfItems);
 	}
 
 	@Override
@@ -30,16 +29,16 @@ class Checkout extends ConditionalActivity{
 		//We then remove a customer from the Queue
 		this.icCustomer = model.rCheckoutQueues[id].remove();
 		//The Customer that we removed from the Queue is now the currentCustomer of the CheckoutCounter
-		model.rCheckouts[id].currentCustomer = this.icCustomer;
+		model.rCheckoutCounters[id].currentCustomer = this.icCustomer;
 		//Update the output parameters based on the fact that the customer is now done waiting
 		model.udp.UpdateOutputs(this.icCustomer);
 		//The Employee at the CheckoutCounter is now BUSY
-		model.rCheckouts[id].status = CheckoutCounter.Status.BUSY;
+		model.rCheckoutCounters[id].status = CheckoutCounter.Status.BUSY;
 		
 		//If there are any baggers available, we take one of them to bag at the current CheckoutCounter
 		if (model.rgBaggers.numAvailable > 0){
 			model.rgBaggers.numAvailable--;
-			model.rCheckouts[id].baggerPresent = true;
+			model.rCheckoutCounters[id].baggerPresent = true;
 		}
 	}
 
@@ -49,9 +48,9 @@ class Checkout extends ConditionalActivity{
 		icCustomer.isServed = true;
 
 		//If there was a bagger present at this instance of the activity, the bagger is now made available again
-		if (model.rCheckouts[id].baggerPresent){
+		if (model.rCheckoutCounters[id].baggerPresent){
 			model.rgBaggers.numAvailable++;
-			model.rCheckouts[id].baggerPresent = false;
+			model.rCheckoutCounters[id].baggerPresent = false;
 	
 			//Since there was a bagger present at the CheckoutCounter, they Customer has also been bagged.
 			icCustomer.isBagged = true;
@@ -63,13 +62,13 @@ class Checkout extends ConditionalActivity{
 				
 				//The current CheckoutCounter is no longer interested with the current customer, and can continue serving
 				//or if they are closing and their queue is empty, the cashier will leave
-				if(model.rCheckouts[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
-					model.rCheckouts[id].status = CheckoutCounter.Status.UNATTENDED;
+				if(model.rCheckoutCounters[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+					model.rCheckoutCounters[id].status = CheckoutCounter.Status.UNATTENDED;
 				} 
 				else{
-					model.rCheckouts[id].status = CheckoutCounter.Status.NOT_BUSY;
+					model.rCheckoutCounters[id].status = CheckoutCounter.Status.NOT_BUSY;
 				}				
-				model.rCheckouts[id].currentCustomer = null;
+				model.rCheckoutCounters[id].currentCustomer = null;
 			}
 		}
 		

@@ -13,24 +13,19 @@ class RVPs
 	// reference variables here and create the objects in the
 	// constructor with seeds
 
-	/* Random Variate Procedure for Arrivals */
-	private Exponential interArrDist;  // Exponential distribution for interarrival times
-	private final double WMEAN1=30.0;// !! Customer Arrival every 30 minutes
-	
 
-	
 	// Constructor
 	protected RVPs(SMSuperstore model, Seeds sd) 
 	{ 
 		this.model = model; 
 		// Set up distribution functions
 		interArrDist = new Exponential(0.0,  new MersenneTwister(sd.getSeed()));
+		priceCheckDist = new Exponential(0.0, new MersenneTwister(sd.getSeed()));
 		
 		numItemDist1 = new Normal(ITEMS_PER_CUSTOMER_MEAN_1, ITEMS_PER_CUSTOMER_SD_1, new MersenneTwister(sd.getSeed()));//need to hook up seeds
 		numItemDist2 = new Normal(ITEMS_PER_CUSTOMER_MEAN_2, ITEMS_PER_CUSTOMER_SD_2, new MersenneTwister(sd.getSeed()));
 		
 		paymentTimeDist = new Normal(0, 0,  new MersenneTwister(sd.getSeed()));
-//		validationTimeDist = new Normal(VALIDATION_MEAN, VALIDATION_SD, null);
 		
 		paymentTypeRandGen = new MersenneTwister(sd.getSeed());
 		checkoutTimeDist = new Normal(0,0, new MersenneTwister(sd.getSeed()));
@@ -50,6 +45,8 @@ class RVPs
 	private double[] timePeriods = {
 		30.0, 60.0, 90.0, 120.0, 150.0, 180.0, 210.0, 240.0, 270.0, 300.0, 330.0, 360.0, 390.0, 420.0, 450.0, 480.0	
 	};
+
+	private Exponential interArrDist;  // Exponential distribution for interarrival times
 	
 	protected double duC()  // for getting next value of duInput
 	{
@@ -134,12 +131,15 @@ class RVPs
 	private final double PROP_PRICE_CHECK = 0.013;
 	private final double PROP_NO_CHECK = 0.987;
 	
+	private Exponential priceCheckDist;
+	private final double PRICE_CHECK_MEAN = 2.2;
+	
 	protected double uCheckoutTm(int numOfItems){
 		
 		double addedTime = 0.0;
 		for (int i = 0 ; i < numOfItems ; i++){
 			double randNum = pricecheckRandGen.nextDouble(); 
-			if (randNum <= PROP_PRICE_CHECK) addedTime += 2.2;
+			if (randNum <= PROP_PRICE_CHECK) addedTime += priceCheckDist.nextDouble(1.0/PRICE_CHECK_MEAN);
 		}
 		
 		return (numOfItems * (checkoutTimeDist.nextDouble(CHECKOUT_MEAN, CHECKOUT_STANDARD_DEVIATION))) + addedTime;
@@ -173,20 +173,14 @@ class RVPs
 	private final double BAGGING_STANDARD_DEVIATION = 0.0042;//need to fix 20%
 	
 	protected double uBaggingTm(int numOfItems){
-		double test = (checkoutTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION));
-		double t = numOfItems * test;
-		return t;
+		double totalBaggingTime = 0.0;
+		for (int i = 0 ; i < numOfItems ; i++){
+			totalBaggingTime += baggingTimeDist.nextDouble(BAGGING_MEAN, BAGGING_STANDARD_DEVIATION);
+		}
+		return totalBaggingTime;
 	}
 
 	/****************************/
 	
-//	private Normal validationTimeDist;
-//	private final double VALIDATION_MEAN = 1.25;
-//	private final double VALIDATION_SD = 0.21;
-//	
-//	protected double uValidationTM(){
-//		return validationTimeDist.nextDouble();
-//	}
-
 
 }

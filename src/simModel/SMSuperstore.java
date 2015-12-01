@@ -25,7 +25,7 @@ public class SMSuperstore extends AOSimulationModel
 	// Define the reference variables to the various 
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
-	protected CheckoutCounter[] rCheckouts = new CheckoutCounter[20];
+	protected CheckoutCounter[] rCheckoutCounters = new CheckoutCounter[20];
 	protected Queue<Customer>[] rCheckoutQueues = (LinkedList<Customer>[]) new LinkedList[20];
 	
 	protected Supervisor rSupervisor = new Supervisor();
@@ -142,11 +142,11 @@ public class SMSuperstore extends AOSimulationModel
 			Boolean[] baggerStatusArray = new Boolean[20];
 			int[] queueLengthArray = new int[20];
 			Boolean[] isClosingArray = new Boolean[20];
-			for(int i=0; i<rCheckouts.length; i++){
-				cashierStatusArray[i] = rCheckouts[i].status;
-				baggerStatusArray[i] = rCheckouts[i].baggerPresent;
+			for(int i=0; i<rCheckoutCounters.length; i++){
+				cashierStatusArray[i] = rCheckoutCounters[i].status;
+				baggerStatusArray[i] = rCheckoutCounters[i].baggerPresent;
 				queueLengthArray[i] = rCheckoutQueues[i].size();
-				isClosingArray[i] = rCheckouts[i].isClosing;
+				isClosingArray[i] = rCheckoutCounters[i].isClosing;
 			}
 			
 			System.out.println("");
