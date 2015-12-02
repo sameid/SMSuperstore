@@ -44,11 +44,11 @@ class BaggingByCashier extends ConditionalActivity{
 		//If the Customer's has to pay with a check, but they forgot their cashing card, they will be sent to
 		//Supervisor so that their Payment can be approved.
 		if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
-			model.rSupervisorQueue.add(icCustomer);
+			model.qSupervisorQueue.add(icCustomer);
 			
 			//Now that the Customer has been served, bagged, and has payed, they can leave, and free up the respective CheckoutCounter
 			//or if the checkout is closing and the queue is empty, the cashier will leave
-			if(model.rCheckoutCounters[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+			if(model.rCheckoutCounters[id].isClosing && model.qCheckoutQueues[id].isEmpty()){
 				model.rCheckoutCounters[id].status = CheckoutCounter.Status.UNATTENDED;
 			} 
 			else{

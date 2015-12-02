@@ -26,10 +26,10 @@ public class SMSuperstore extends AOSimulationModel
 	// entities with scope Set and Unary
 	// Objects can be created here or in the Initialise Action
 	protected CheckoutCounter[] rCheckoutCounters = new CheckoutCounter[20];
-	protected Queue<Customer>[] rCheckoutQueues = (LinkedList<Customer>[]) new LinkedList[20];
+	protected Queue<Customer>[] qCheckoutQueues = (LinkedList<Customer>[]) new LinkedList[20];
 	
 	protected Supervisor rSupervisor = new Supervisor();
-	protected Queue<Customer> rSupervisorQueue = new LinkedList<Customer>();
+	protected Queue<Customer> qSupervisorQueue = new LinkedList<Customer>();
 	
 	protected Baggers rgBaggers = new Baggers();
 	
@@ -145,7 +145,7 @@ public class SMSuperstore extends AOSimulationModel
 			for(int i=0; i<rCheckoutCounters.length; i++){
 				cashierStatusArray[i] = rCheckoutCounters[i].status;
 				baggerStatusArray[i] = rCheckoutCounters[i].baggerPresent;
-				queueLengthArray[i] = rCheckoutQueues[i].size();
+				queueLengthArray[i] = qCheckoutQueues[i].size();
 				isClosingArray[i] = rCheckoutCounters[i].isClosing;
 			}
 			

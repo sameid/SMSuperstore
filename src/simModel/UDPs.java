@@ -32,7 +32,7 @@ class UDPs
 	protected int CanCheckoutServe (){
 		
 		for (int i = 0 ; i < model.rCheckoutCounters.length ; i++){
-			if (model.rCheckoutCounters[i].status == CheckoutCounter.Status.NOT_BUSY && !model.rCheckoutQueues[i].isEmpty()){
+			if (model.rCheckoutCounters[i].status == CheckoutCounter.Status.NOT_BUSY && !model.qCheckoutQueues[i].isEmpty()){
 				return i;
 			}
 		}
@@ -104,14 +104,14 @@ class UDPs
 			
 			//If the customer finds a checkout with an idle cashier, it is the appropriate choice
 			//A queue can be empty but the cashier busy, so selecting a not busy cashier instead is preferable
-			if (c.status == CheckoutCounter.Status.NOT_BUSY && model.rCheckoutQueues[i].isEmpty()){
+			if (c.status == CheckoutCounter.Status.NOT_BUSY && model.qCheckoutQueues[i].isEmpty()){
 				checkoutSelected = i;
 				break;
 			}
 			//This if condition will ensure that the Checkout has an employee that is currently serving customers.
 			if (c.status != CheckoutCounter.Status.UNATTENDED && !c.isClosing){
-				if (model.rCheckoutQueues[i].size() < min || min == -1){
-					min = model.rCheckoutQueues[i].size();
+				if (model.qCheckoutQueues[i].size() < min || min == -1){
+					min = model.qCheckoutQueues[i].size();
 					checkoutSelected = i;
 				}
 			}

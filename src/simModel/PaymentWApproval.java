@@ -12,7 +12,7 @@ class PaymentWApproval extends ConditionalActivity{
 	}
 	
 	protected static boolean precondition (SMSuperstore model){
-		return model.rSupervisor.status == Supervisor.Status.NOT_BUSY && !model.rSupervisorQueue.isEmpty();
+		return model.rSupervisor.status == Supervisor.Status.NOT_BUSY && !model.qSupervisorQueue.isEmpty();
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ class PaymentWApproval extends ConditionalActivity{
 	@Override
 	public void startingEvent() {
 		//Simply removing the Customer from the SupervisorQueue, and setting the Supervisor checkout to BUSY
-		icCustomer = model.rSupervisorQueue.remove();
+		icCustomer = model.qSupervisorQueue.remove();
 		model.rSupervisor.status = Supervisor.Status.BUSY; 
 	}
 

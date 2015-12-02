@@ -30,6 +30,6 @@ public class Arrivals extends ScheduledAction{
 		int id = model.udp.GetShortestQueue();
 		
 		//Add the customer to the CustomerQueue with the least number of people	
-		model.rCheckoutQueues[id].add(icCustomer);
+		model.qCheckoutQueues[id].add(icCustomer);
 	}
 }

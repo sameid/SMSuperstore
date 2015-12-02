@@ -26,7 +26,7 @@ class Initialise extends ScheduledAction
 		for (int i = 0 ; i < model.rCheckoutCounters.length ; i++){
 			model.rCheckoutCounters[i] = new CheckoutCounter();
 			model.rCheckoutCounters[i].status = CheckoutCounter.Status.UNATTENDED;
-			model.rCheckoutQueues[i] = new LinkedList<Customer>();
+			model.qCheckoutQueues[i] = new LinkedList<Customer>();
 		}
 		
 		model.rSupervisor.status = Supervisor.Status.NOT_BUSY;

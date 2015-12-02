@@ -27,7 +27,7 @@ class Checkout extends ConditionalActivity{
 		//are Customers in the Queue
 		this.id = model.udp.CanCheckoutServe();
 		//We then remove a customer from the Queue
-		this.icCustomer = model.rCheckoutQueues[id].remove();
+		this.icCustomer = model.qCheckoutQueues[id].remove();
 		//The Customer that we removed from the Queue is now the currentCustomer of the CheckoutCounter
 		model.rCheckoutCounters[id].currentCustomer = this.icCustomer;
 		//Update the output parameters based on the fact that the customer is now done waiting
@@ -58,11 +58,11 @@ class Checkout extends ConditionalActivity{
 			//If the Customer is trying to pay with a Check, but does not have their check cashing card, they will need
 			//Supervisor approval, and so the Customer will be sent to the SupervisorQueue.
 			if(icCustomer.paymentType == Customer.PaymentType.CHECK_WITHOUT_CHECK_CASHING_CARD){
-				model.rSupervisorQueue.add(icCustomer);
+				model.qSupervisorQueue.add(icCustomer);
 				
 				//The current CheckoutCounter is no longer interested with the current customer, and can continue serving
 				//or if they are closing and their queue is empty, the cashier will leave
-				if(model.rCheckoutCounters[id].isClosing && model.rCheckoutQueues[id].isEmpty()){
+				if(model.rCheckoutCounters[id].isClosing && model.qCheckoutQueues[id].isEmpty()){
 					model.rCheckoutCounters[id].status = CheckoutCounter.Status.UNATTENDED;
 				} 
 				else{
