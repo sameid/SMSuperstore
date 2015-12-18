@@ -46,8 +46,13 @@ public class SMSuperstore extends AOSimulationModel
 	// Output object
 	protected Output output = new Output(this);
 	
-	// Output values - define the public methods that return values
-	// required for experimentation.
+	public double getOverallPropLongWait(){
+		return output.overallPropLongWait;
+	}
+	
+	public double[] getPropLongWait(){
+		return output.propLongWait;
+	}
 	
 	
 	// Constructor

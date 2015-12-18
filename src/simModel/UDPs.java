@@ -120,7 +120,34 @@ class UDPs
 		return checkoutSelected;
 	}
 	
-	protected int ChangeNumOfBaggers (int staffChange){
+	protected void SchedulePersonnel(double time){
+		//                                           2:00 pm, 3:30 pm, 6:00 pm,       8:30 pm
+		double[] staffChangeTimeSeq = new double[]{0.0,        90.0,       240.0,     390.0};
+		
+		if(time == staffChangeTimeSeq[0])
+	    {
+	    	model.rgBaggers.numAvailable = ChangeNumOfBaggers(1);
+	    	ChangeNumOfCashiers(1);
+	    }
+	    else if(time == staffChangeTimeSeq[1]) 
+	    {
+	    	model.rgBaggers.numAvailable = ChangeNumOfBaggers(2);
+	    	ChangeNumOfCashiers(2);
+	    }
+	    else if(time == staffChangeTimeSeq[2])
+	    {
+	    	model.rgBaggers.numAvailable = ChangeNumOfBaggers(3);
+	    	ChangeNumOfCashiers(3);
+	    }
+	    else if(time == staffChangeTimeSeq[3])
+	    {
+	    	model.rgBaggers.numAvailable = ChangeNumOfBaggers(4);
+	    	ChangeNumOfCashiers(4);
+	    }
+	    else System.out.println("Invalid time to schedule employees:"+model.getClock());
+	}
+	
+	private int ChangeNumOfBaggers (int staffChange){
 		//Determine the difference in number of baggers between the current scheduling slot and 
 		//the previous one. Then just add the difference to rgBaggers.numAvailable.
 		//If difference is negative, then the number of baggers will be decreased, as desired.
@@ -146,7 +173,7 @@ class UDPs
 	
 	//The following might look complicated but you just have to understand
 	//what may happen during each of the four staff change actions
-	protected void ChangeNumOfCashiers (int staffChange){
+	private void ChangeNumOfCashiers (int staffChange){
 		if (staffChange == 1){
 			addCashiers(model.cashierSchedule[0], 1);
 		}

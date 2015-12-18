@@ -21,28 +21,9 @@ public class StaffChange extends ScheduledAction {
 	// SchedEmp Event
 	protected void actionEvent()
 	{
-		double clock = model.getClock();
-		
-	    if(clock == staffChangeTimeSeq[0])
-	    {
-	    	model.rgBaggers.numAvailable = model.udp.ChangeNumOfBaggers(1);
-	    	model.udp.ChangeNumOfCashiers(1);
-	    }
-	    else if(clock == staffChangeTimeSeq[1]) 
-	    {
-	    	model.rgBaggers.numAvailable = model.udp.ChangeNumOfBaggers(2);
-	    	model.udp.ChangeNumOfCashiers(2);
-	    }
-	    else if(clock == staffChangeTimeSeq[2])
-	    {
-	    	model.rgBaggers.numAvailable = model.udp.ChangeNumOfBaggers(3);
-	    	model.udp.ChangeNumOfCashiers(3);
-	    }
-	    else if( clock == staffChangeTimeSeq[3])
-	    {
-	    	model.rgBaggers.numAvailable = model.udp.ChangeNumOfBaggers(4);
-	    	model.udp.ChangeNumOfCashiers(4);
-	    }
-	    else System.out.println("Invalid time to schedule employees:"+model.getClock());
+		double clock = model.getClock();	
+		//All logic for determining how the schedule should be 
+		//change found in the UDP
+		model.udp.SchedulePersonnel(clock);
 	}
 }
